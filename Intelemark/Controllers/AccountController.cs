@@ -101,7 +101,7 @@ namespace Intelemark.Controllers
                         }
                     }
 
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Forms");
 
                 case SignInStatus.LockedOut:
                     return View("Lockout");
