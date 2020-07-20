@@ -1,0 +1,69 @@
+﻿@model Intelemark.Models.StateRestrictionModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Edit State Restriction</h4>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <form class="form">
+                        <div class="form-body">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <h4 class="form-section"><i class="ft-flag"></i> General Information</h4>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Abbreviation)
+                                        @Html.EditorFor(model => model.Abbreviation, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                        @Html.ValidationMessageFor(model => model.Abbreviation, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Name)
+                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.IsRestricted)
+                                        <div class="checkbox">
+                                            @Html.EditorFor(model => model.IsRestricted)
+                                            @Html.ValidationMessageFor(model => model.IsRestricted, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                <div class="form-actions pull-right">
+                    <a href="@Url.Action("Index", "StateRestrictions")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="la la-check-square-o"></i> Save
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+}
+
+

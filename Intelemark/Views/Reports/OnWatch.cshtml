@@ -1,0 +1,140 @@
+﻿@model List<Intelemark.Models.Reports.OnWatchViewModel>
+
+@{
+    ViewBag.Title = "On Watch";
+    var start = Model.FirstOrDefault()?.StartDate ?? DateTime.Now.AddDays(-1);
+    var end = Model.FirstOrDefault()?.EndDate ?? DateTime.Now;
+}
+
+<form action="/Reports/OnWatch" enctype="multipart/form-data" method="post">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">On Watch</h4>
+                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <table class="table table-striped table-hover table-bordered dataTable OnWatchDatatable" data-title="Intelemark On Watch Report">
+                        <thead>
+                            <tr>
+                                <th class="noExport" width="100">
+                                    Notifications
+                                </th>
+                                <th>
+                                    Campaign
+                                </th>
+                                <th>
+                                    Total Hours
+                                </th>
+                                <th>
+                                    Campaign Limit
+                                </th>
+                                <th class="noExport">
+                                    Send when X hours left
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Count(); i++)
+                            {
+                                <tr class="bg-lighten-5">
+                                    <td align="center">
+                                        @Html.HiddenFor(x => x[i].CampaignId, new { @value = Model[i].CampaignId })
+                                        @Html.CheckBoxFor(x => x[i].IsActive, new { @class = "checkbox" })
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => modelItem[i].Campaign.Identifier) -
+                                        @Html.DisplayFor(modelItem => modelItem[i].Campaign.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => modelItem[i].TotalHours)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => modelItem[i].CampaignLimit)
+                                    </td>
+                                    <td align="center">
+                                        @if (!Model[i].IsActive)
+                                        {
+                                            @Html.TextBoxFor(x => x[i].HoursLeft, new { @class = "hoursLeft", @disabled = true, @type="number" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(x => x[i].HoursLeft, new { @class = "hoursLeft", @type = "number" })
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-12 col-sm-12">
+        <div class="card border-left-blue border-right-blue">
+            <div class="card-header">
+                <div class="body">
+                    <div class="row">
+                        <div class="col-md-12 pull-right">
+                            <strong>@Html.Label("Save Changes")</strong>
+                            <button type="submit" class="btn btn-success text-white form-control">
+                                <i class="la la-check-square-o"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.OnWatchDatatable').DataTable(
+                {
+                    paging: false,
+                    info: true,
+                    searching: true,
+                    colReorder: true,
+                    ordering: true,
+                    retrieve: true,
+                    responsive: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'collection',
+
+                            text: 'Export',
+                            background: true,
+                            buttons: [
+                                { extend: 'copy', text: 'Copy', exportOptions: { columns: ':visible th:not(.noExport)' }, className: 'copyButton' },
+                                { extend: 'excel', text: 'Excel', filename: 'Excel Report', exportOptions: { columns: ':visible th:not(.noExport)' }, title: 'Excel Report' },
+                                { extend: 'csv', text: 'CSV', filename: 'CSV Report', exportOptions: { columns: ':visible th:not(.noExport)' }, title: 'CSV Report' },
+                                { extend: 'print', text: 'Print', filename: 'Printed Report', exportOptions: { columns: ':visible th:not(.noExport)' }, title: 'Printed Report' },
+                                { extend: 'pdf', text: 'PDF', filename: 'PDF Report', exportOptions: { columns: ':visible th:not(.noExport)' }, title: 'PDF Report' },
+                            ]
+                        }
+                    ]
+                });
+        });
+
+        $(".checkbox").change(function () {
+            if (this.checked) {
+                $(this).parent().parent().find(".hoursLeft").each(function () {
+                    this.disabled = false;
+                });
+            } else {
+                $(this).parent().parent().find(".hoursLeft").each(function () {
+                    this.disabled = true;
+                });
+            }
+        });
+    </script>
+}
+
+

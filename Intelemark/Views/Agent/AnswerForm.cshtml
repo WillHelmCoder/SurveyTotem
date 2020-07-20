@@ -1,0 +1,294 @@
+﻿
+@using ExtensionMethods;
+@model Intelemark.Models.SingleFormModel
+
+@{
+    /**/
+
+    ViewBag.Title = "Module";
+    int count = 1;
+    int answerCount = 0;
+  //  bool SpellCheck = Model.CurrentCampaign.SpellCheck;
+    string dClass = "";
+
+}
+
+<style>
+    .blockUI {
+        cursor: default !important;
+    }
+</style>
+
+@using (Html.BeginForm("SaveAnswerForm", "Agent", FormMethod.Post, new { @class = "form", role = "form" }))
+{
+  //  @Html.HiddenFor(x => x.Record.Seconds, new { @id = "Differential" })
+
+      
+
+
+    <div class="row">
+        @if (Model.Form != null)
+        {
+            dClass = "col-md-7";
+        }
+        else
+        {
+            dClass = "col-md-12";
+        }
+        
+        @if (Model.Form != null)
+        {
+            <div class="col-md-5  col-sm-12">
+                <div class="card card2">
+                    <div class="card-header">
+                        <h4 class="card-title" id="heading-multiple-icons">Form - @Model.Form.Name</h4>
+                        @Html.HiddenFor(x => x.Record.FormId, new { @Value = @Model.Form.Id })
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a href="#" data-action="expand"><i class="ft-maximize"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            @foreach (var item in Model.Form.QuestionList)
+                            {
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h6><strong>@count. @item.Question</strong></h6>
+                                        @Html.HiddenFor(x => x.Record.FormAnswers[count - 1].QuestionId, new { @Value = item.Id })
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                        @if (item.TypeId.Equals(Intelemark.Utilities.QuestionTypes.OpenAnswer))
+                                        {
+                                            @Html.TextBoxFor(x => x.Record.FormAnswers[count - 1].Answer, null, new { @class = "form-control", @placeholder = "Answer" })
+                                        }
+                                        else if (item.TypeId.Equals(Intelemark.Utilities.QuestionTypes.SelectableAnswer))
+                                        {
+                                            @Html.DropDownListFor(x => x.Record.FormAnswers[count - 1].Answer, item.AnswerList.Select(x => new SelectListItem() { Text = x.Answer, Value = x.Answer }), "Select an Answer", new { @class = "form-control select2", @placeholder = "Answer" })
+                                        }
+                                        else if (item.TypeId.Equals(Intelemark.Utilities.QuestionTypes.CalendarAnswer))
+                                        {
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(x => x.Record.FormAnswers[count - 1].Answer, null, new { @class = "form-control col-md-4 pickadate-dropdown picker__input", @placeholder = "Select a date" })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <span class="la la-calendar-o"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (item.TypeId.Equals(Intelemark.Utilities.QuestionTypes.MultipleAnswer))
+                                        {
+                                            <div class="row skin skin-square">
+                                                @foreach (var answer in item.AnswerList)
+                                                {
+                                                    <div class="col-md-5">
+                                                        <fieldset>
+                                                            @Html.CheckBoxFor(m => m.Record.FormAnswers[count - 1].CheckBoxAnswer[answerCount].Checked, new { @id = answer.Id })
+                                                            @Html.LabelFor(m => m.Record.FormAnswers[count - 1].CheckBoxAnswer[answerCount].Answer, answer.Answer, new { @for = answer.Id })
+                                                            @Html.HiddenFor(m => m.Record.FormAnswers[count - 1].CheckBoxAnswer[answerCount].Answer, new { @for = answer.Id, @Value = answer.Answer })
+                                                        </fieldset>
+                                                    </div>
+                                                    answerCount++;
+                                                }
+                                            </div>
+                                        }
+                                        else if (item.TypeId.Equals(Intelemark.Utilities.QuestionTypes.TimeAnswer))
+                                        {
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(x => x.Record.FormAnswers[count - 1].Answer, null, new { @readonly = "readonly", @class = "form-control col-md-4 datetimepicker", @placeholder = "Select a date", @aria_readonly = "false" })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <span class="ft-clock"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (item.TypeId.Equals(Intelemark.Utilities.QuestionTypes.CalendarTimeAnswer))
+                                        {
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(x => x.Record.FormAnswers[count - 1].Answer, null, new { @readonly = "readonly", @class = "form-control col-md-4 datetimepicker", @placeholder = "Select a date", @aria_readonly = "false" })
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <span class="la la-calendar-o datetimepicker"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                count++;
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+ 
+
+    <input type="submit" value="Salvar" />
+
+
+
+}
+
+@section scripts {
+    <script src="~/Scripts/app-assets/js/scripts/timerjs/easytimer.min.js" type="text/javascript"></script>
+
+    <script>
+        var timer;
+        $(document).ready(function () {
+            $('.animatedCard').css('visibility', '').addClass('fadeInUp' + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend')
+            timer = new Timer();
+            timer.addEventListener('secondsUpdated', function (e) {
+                $('#timer').html(timer.getTimeValues().toString());
+            });
+            StartTimer()
+        });
+
+        var schedules = false;
+
+        $(".EOC").on('change', function () {
+
+            if ($(this).val() == "") {
+                return;
+            }
+
+            $("#Differential").val(timer.getTimeValues().seconds);
+            timer.pause();
+
+            schedules = false;
+
+           
+
+
+            if (SpellCheck)
+            {
+                SpellCheck();
+            }
+            else
+            {
+                if (schedules)
+                {
+                    OpenSchedule();
+                    return;
+                }
+
+                $.blockUI({
+                    message: '<div class="ft-refresh-cw icon-spin white font-large-1"></div>  <div style="color: white;"><strong>Saving...</strong></div>',
+                    overlayCSS: {
+                        //  backgroundColor: '#FFF',
+                        opacity: 0.6,
+                        cursor: 'wait'
+                    },
+                    css: {
+                        border: 0,
+                        padding: 0,
+                        backgroundColor: 'transparent'
+                    }
+                });
+
+               var form = $(".EOC").parents('form');
+               form.submit();
+            }
+
+        });
+
+        function OpenSchedule()
+        {
+            $(".appointmentModal").modal();
+        }
+
+        function BlockScreen() {
+            $.blockUI({
+                message: '<div class="ft-refresh-cw icon-spin white font-large-1"></div>  <div style="color: white;"><strong>Saving...</strong></div>',
+                overlayCSS: {
+                    //  backgroundColor: '#FFF',
+                    opacity: 0.6,
+                    cursor: 'wait'
+                },
+                css: {
+                    border: 0,
+                    padding: 0,
+                    backgroundColor: 'transparent'
+                }
+            });
+        }
+
+        function StartTimer() {
+            $('#timerDiv').css('visibility', '').addClass('zoomIn' + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend')
+            $('.startTimer').addClass('fadeOutRight' + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend')
+            timer.start();
+            $(".card2").unblock();
+        }
+
+        //function BlockSurvey() {
+        //    $(".card2").block({
+        //        message: '<h1><i style="font-size:50px" class="ft ft-lock"></i></h1> <h1>Please start the call to unlock</h1>',
+        //        overlayCSS: {
+        //            backgroundColor: '#fff',
+        //            opacity: 0.8,
+        //            cursor: 'wait'
+        //        },
+        //        css: {
+        //            border: 0,
+        //            padding: 0,
+        //            backgroundColor: 'transparent'
+        //        }
+        //    });
+        //}
+
+        function SpellCheck() {
+            swal({
+                title: 'Did you check your spelling?',
+                text: "If you did, save your form!",
+                icon: "warning",
+                buttons: {
+                    check: {
+                        text: "Recheck!",
+                        className: "btn-warning",
+                        value: false
+                    },
+                    catch: {
+                        text: "Yes, save form",
+                        value: true,
+                        className: "btn-success"
+                    }
+                }
+
+            })
+                .then((value) => {
+                    if (value) {
+
+                        if (schedules) {
+                            OpenSchedule();
+                            return;
+                        }
+                        $.blockUI({
+                            message: '<div class="ft-refresh-cw icon-spin white font-large-1"></div>  <div style="color: white;"><strong>Saving...</strong></div>',
+                            overlayCSS: {
+                                //  backgroundColor: '#FFF',
+                                opacity: 0.6,
+                                cursor: 'wait'
+                            },
+                            css: {
+                                border: 0,
+                                padding: 0,
+                                backgroundColor: 'transparent'
+                            }
+                        });
+                        var form = $(".EOC").parents('form');
+                        form.submit();
+                    }
+                });
+        }
+
+    </script>
+}

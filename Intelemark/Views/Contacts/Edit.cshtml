@@ -1,0 +1,262 @@
+﻿@model Intelemark.Models.ContactModel
+
+@{
+    ViewBag.Title = "Edit";
+    var IsAgent = "";
+    int count = 1;
+    if (User.IsInRole("Agent"))
+    {
+        IsAgent = "hidden";
+    }
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Edit Contact</h4>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <form class="form">
+                        <div class="form-body">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <h4 class="form-section"><i class="ft-flag"></i> General Information</h4>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Company)
+                                        @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control", @placeholder = "Company of the contact" } })
+                                        @Html.ValidationMessageFor(model => model.Company, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SIC)
+                                        @Html.EditorFor(model => model.SIC, new { htmlAttributes = new { @class = "form-control", @placeholder = "The SIC of the Contact" } })
+                                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Title)
+                                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @placeholder = "The Title of the Contact i.e. CEO   " } })
+                                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Name)
+                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Full Name of the contact that will be displayed to the agent." } })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Extension)
+                                        @Html.EditorFor(model => model.Extension, new { htmlAttributes = new { @class = "form-control", @placeholder = "Extension for the phone number.", @type = "number" } })
+                                        @Html.ValidationMessageFor(model => model.Extension, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.PhoneNumber)
+                                        @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control phone-inputmask", @placeholder = "The phone number that will be used to reach the contact" } })
+                                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.AltPhoneNumber)
+                                        @Html.EditorFor(model => model.AltPhoneNumber, new { htmlAttributes = new { @class = "form-control phone-inputmask", @placeholder = "Alternative Phone Number in case we couldnt reach the contact" } })
+                                        @Html.ValidationMessageFor(model => model.AltPhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Email)
+                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Email from the contact" } })
+                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Address)
+                                        @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", @placeholder = "Address from the contact" } })
+                                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.AltAddress)
+                                        @Html.EditorFor(model => model.AltAddress, new { htmlAttributes = new { @class = "form-control", @placeholder = "Alternative address for the contact" } })
+                                        @Html.ValidationMessageFor(model => model.AltAddress, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.City)
+                                        @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control", @placeholder = "City" } })
+                                        @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.State)
+                                        @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control", @placeholder = "State from the Contact" } })
+                                        @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Country)
+                                        @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control", @Value = "United States" } })
+                                        @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ZipCode)
+                                        @Html.EditorFor(model => model.ZipCode, new { htmlAttributes = new { @class = "form-control", @placeholder = "This will be used to determine the timezone for the contact", @type = "number" } })
+                                        @Html.ValidationMessageFor(model => model.ZipCode, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Time Zone</label>
+                                        @Html.DropDownList("TimeZoneId", null, htmlAttributes: new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(model => model.TimeZoneId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4" style="visibility: @IsAgent">
+                                    <div class="form-group">
+                                        <label>Project</label>
+                                        @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(model => model.ProjectId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-4" style="visibility: @IsAgent">
+                                    <div class="form-group">
+                                        <label>Linked Agent</label>
+                                        @Html.DropDownList("AgentId", null, "Unlink Agent", htmlAttributes: new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(model => model.TimeZoneId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Notes)
+                                        @Html.TextAreaFor(m => m.Notes, new { @class = "form-control", @rows = "8", @placeholder = "Notes for this contact" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 class="form-section"><i class="ft-flag"></i> Extra Fields</h4>
+                            <div class="row">
+                                @foreach (var item in Model.ExtraFields)
+                                {
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.HiddenFor(x => x.ExtraFieldValues[count - 1].ExtraFieldId, new { @Value = item.Id })
+                                            @Html.HiddenFor(x => x.ExtraFieldValues[count - 1].Id, new { @Value = Model.ExtraFieldValues[count - 1].Id })
+                                            <label>@item.FieldName</label>
+                                            @if (item.TypeId.Equals(Intelemark.Utilities.FieldTypes.Text))
+                                            {
+                                                @Html.TextBoxFor(x => x.ExtraFieldValues[count - 1].Value, null, new { @class = "form-control", @placeholder = "Answer" })
+                                            }
+                                            else if (item.TypeId.Equals(Intelemark.Utilities.FieldTypes.SelectableOption))
+                                            {
+                                                @Html.DropDownListFor(x => x.ExtraFieldValues[count - 1].Value, new SelectList(item.ExtraFieldOptions, "FieldOptionName", "FieldOptionName", Model.ExtraFieldValues[count - 1]?.Value), new { @class = "form-control select2", @placeholder = "Answer" })
+                                            }
+                                            else if (item.TypeId.Equals(Intelemark.Utilities.FieldTypes.DateOption))
+                                            {
+                                                <div class="input-group">
+                                                    @Html.TextBoxFor(x => x.ExtraFieldValues[count - 1].Value, null, new { @class = "form-control col-md-4 pickadate-dropdown picker__input", @placeholder = "Select a date" })
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <span class="la la-calendar-o"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else if (item.TypeId.Equals(Intelemark.Utilities.FieldTypes.TimeOption))
+                                            {
+                                                <div class="input-group">
+                                                    @Html.TextBoxFor(x => x.ExtraFieldValues[count - 1].Value, null, new { @readonly = "readonly", @class = "form-control col-md-4 datetimepicker", @placeholder = "Select a date", @aria_readonly = "false" })
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <span class="ft-clock"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else if (item.TypeId.Equals(Intelemark.Utilities.QuestionTypes.CalendarTimeAnswer))
+                                            {
+                                                <div class="input-group">
+                                                    @Html.TextBoxFor(x => x.ExtraFieldValues[count - 1].Value, null, new { @readonly = "readonly", @class = "form-control col-md-4 datetimepicker", @placeholder = "Select a date", @aria_readonly = "false" })
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <span class="la la-calendar-o datetimepicker"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    count++;
+                                }
+                            </div>
+
+                            <div class="form-actions pull-right">
+                                <a href="@Url.Action("Index", "Contacts")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="la la-check-square-o"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

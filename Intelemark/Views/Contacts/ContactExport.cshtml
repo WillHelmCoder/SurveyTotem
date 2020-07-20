@@ -1,0 +1,471 @@
+﻿@model Intelemark.Models.Reports.ContactExportViewModel
+@{
+    ViewBag.Title = "Contact Export";
+    int count = 0;
+}
+
+<style>
+    .content-wrapper table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, .content-wrapper table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
+        background-color: #666EE8;
+        border-radius: 0;
+        top: 10px;
+        left: 4px;
+        box-shadow: 0 0 2px #444;
+    }
+
+    table {
+        width: 100% !important;
+    }
+</style>
+
+<form action="/Contacts/ContactExport" enctype="multipart/form-data" method="post">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <div class="card border-left-blue border-right-blue">
+                <div class="card-header">
+                    <div class="body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.DropDownList("CampaignId", null, "Select Campaign", htmlAttributes: new { @class = "form-control select2", @id = "CampaignId", @style = "width: 100%" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.DropDownList("ExportSettingsId", null, "Select Settings", htmlAttributes: new { @class = "form-control select2", @id = "ExportSettingsId", @style = "width: 100%" })
+                                </div>
+                            </div>
+                            <div class="col-md-2 mb-1 pull-right">
+                                <button type="submit" class="btn btn-success text-white form-control">
+                                    <i class="la la-check-square-o"></i> Submit
+                                </button>
+                            </div>
+
+                            <div class="col-md-2 mb-1 pull-right">
+                                <button onclick="$('.companyLink').modal(); return false;" class="btn btn-primary text-white form-control">
+                                    <i class="la la-check-square-o"></i> Show/Hide Columns
+                                </button>
+                            </div>
+
+                            <div class="col-md-2 mb-1 pull-right">
+                                <button onclick="$('.settings').modal(); return false;" class="btn btn-warning text-white form-control">
+                                    <i class="la la-check-square-o"></i> Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    <div class="col-12 col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Contacts List</h4>
+                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <table class="table table-striped table-hover table-bordered exportDatatable2 dataTable table-dataTables">
+                        <thead>
+                            <tr>
+                                <th name="id" style="width: 10px !important">
+                                    Id
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Company
+                                </th>
+                                <th>
+                                    SIC
+                                </th>
+                                <th style="width: 50px !important">
+                                    Campaign
+                                </th>
+                                <th>
+                                    Project
+                                </th>
+                                <th>
+                                    Phone #
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                <th>
+                                    Notes
+                                </th>
+                                <th>
+                                    City
+                                </th>
+                                <th width="50">
+                                    State
+                                </th>
+                                @foreach (var item in Model?.SelectedCampaign?.ExtraFields ?? new List<Intelemark.Entities.ExtraField>())
+                                {
+                                    <th>
+                                        @item.FieldName
+                                    </th>
+                                }
+                                @foreach (var item2 in Model?.Forms ?? new List<Intelemark.Entities.Question>())
+                                {
+                                    <th class="text-truncate">
+                                        <span class="text-truncate">
+                                            @item2.Name
+                                        </span>
+                                    </th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Contacts ?? new List<Intelemark.Models.ContactModel>())
+                            {
+                            <tr>
+                                <td name="Id">
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Company)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SIC)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Project.Campaign.Identifier)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Project.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Notes)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.City)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.State)
+                                </td>
+                                @foreach (var item2 in Model.SelectedCampaign.ExtraFields)
+                                {
+                                    <td>
+                                        @item.ExtraFieldValues[count].Value
+                                    </td>
+                                    count++;
+                                }
+                                @{
+                                    count = 0;
+                                }
+                                @foreach (var item3 in Model?.Forms ?? new List<Intelemark.Entities.Question>())
+                                {
+                                    <td class="text-truncate">
+                                        <span class="text-truncate">
+                                            @item.FormAnswers[count].Answer
+                                        </span>
+                                    </td>
+                                    count++;
+                                }
+                            </tr>
+                                count = 0;
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade companyLink" data- tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="min-width: 30vw !important;">
+            <div class="modal-header bg-success white">
+                <h3 class="modal-title white">Company Link</h3>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="heading-icon">Show / hide columns</h4>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row filters">
+                                <div class="col-md-4 mb-1">
+                                    <button class="removeColumn btn btn-sm btn-success lighten-5 col-md-12" data-column="Id:name">Id</button>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <button class="removeColumn btn btn-sm btn-success lighten-5 col-md-12" data-column="Name:name">Name</button>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <button class="removeColumn btn btn-sm btn-success lighten-5 col-md-12" data-column="Company:name">Company</button>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <button class="removeColumn btn btn-sm btn-success lighten-5 col-md-12" data-column="SIC:name">SIC</button>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <button class="removeColumn btn btn-sm btn-success lighten-5 col-md-12" data-column="Campaign:name">Campaign</button>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <button class="removeColumn btn btn-sm btn-success lighten-5 col-md-12" data-column="Project:name">Project</button>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <button class="removeColumn btn btn-sm btn-success lighten-5 col-md-12" data-column="Phone:name">Phone #</button>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <button class="removeColumn btn btn-sm btn-success lighten-5 col-md-12" data-column="Email:name">Email</button>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <button class="removeColumn btn btn-sm btn-success lighten-5 col-md-12" data-column="Notes:name">Notes</button>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <button class="removeColumn btn btn-sm btn-success lighten-5 col-md-12" data-column="City:name">City</button>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <button class="removeColumn btn btn-sm btn-success lighten-5 col-md-12" data-column="State:name">State</button>
+                                </div>
+
+                                @foreach (var item in Model?.SelectedCampaign?.ExtraFields ?? new List<Intelemark.Entities.ExtraField>())
+                                {
+                                    <div class="col-md-4 mb-1">
+                                        <button class="removeColumn text-truncate btn btn-sm btn-success lighten-5 col-md-12" data-column="@item.FieldName:name">@item.FieldName</button>
+                                    </div>
+
+                                }
+                                @foreach (var item in Model?.Forms ?? new List<Intelemark.Entities.Question>())
+                                {
+                                    <div class="col-md-4 mb-1">
+                                        <button class="removeColumn text-truncate btn btn-sm btn-success lighten-5 col-md-12" data-column="@item.Name:name">@item.Name</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success text-white" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade settings" data- tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="min-width: 30vw !important;">
+            <div class="modal-header bg-success white">
+                <h3 class="modal-title white">Configure the report</h3>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="heading-icon">Save Settings for this campaign</h4>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input id="Name" name="Name" class="form-control" placeholder="Name" />
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button class="btn btn-success" onclick="saveSettings();"><i class="la la-check-square-o"></i> Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning text-white" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            var val = '@ViewBag.Valye';
+            val = val.replace(/&quot;/g, '"')
+            console.log(val);
+
+            localStorage.setItem('@ViewBag.Key', val);
+            //$(".exportDatatable").find("th").each(function (index, value) {
+            //   this.innerHTML += '<a class="removeColumn" data-column="' + index + '"><i class="la la-remove" style="font-size: 0.8rem !important;"></i></a>'
+            // });
+
+            $('.exportDatatable2').DataTable(
+                {
+                    stateSave: true,
+                    paging: true,
+                    info: true,
+                    searching: true,
+                    colReorder: true,
+                    ordering: true,
+                    retrieve: true,
+                    responsive: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'collection',
+
+                            text: 'Export',
+                            background: true,
+                            buttons: [
+                                { extend: 'copy', text: 'Copy', exportOptions: { columns: ':visible th:not(.noExport)' }, className: 'copyButton' },
+                                { extend: 'excel', text: 'Excel', filename: 'Excel Report', exportOptions: { columns: ':visible th:not(.noExport)' }, title: 'Excel Report' },
+                                { extend: 'csv', text: 'CSV', filename: 'CSV Report', exportOptions: { columns: ':visible th:not(.noExport)' }, title: 'CSV Report' },
+                                { extend: 'print', text: 'Print', filename: 'Printed Report', exportOptions: { columns: ':visible th:not(.noExport)' }, title: 'Printed Report' },
+                                { extend: 'pdf', text: 'PDF', filename: 'PDF Report', exportOptions: { columns: ':visible th:not(.noExport)' }, title: 'PDF Report' },
+                            ]
+                        }
+                    ],
+                    columns: [
+                        { name: 'Id' },
+                        { name: 'Name' },
+                        { name: 'Company' },
+                        { name: 'SIC' },
+                        { name: 'Campaign' },
+                        { name: 'Project' },
+                        { name: 'Phone' },
+                        { name: 'Email' },
+                        { name: 'Notes' },
+                        { name: 'City' },
+                        { name: 'State' },
+                        @foreach (var item in Model?.SelectedCampaign?.ExtraFields ?? new List<Intelemark.Entities.ExtraField>())
+                                {
+                                    <text>
+                        { name: '@item.FieldName' },
+                                    </text>
+                                }
+                        @foreach (var item in Model?.Forms ?? new List<Intelemark.Entities.Question>())
+                                {
+                                       <text>
+                        { name: '@item.Name' },
+                                    </text>
+                                }
+                    ]
+                });
+
+
+            $(".removeColumn").click(function (event) {
+                var column = table.column($(this).attr('data-column'));
+                column.visible(!column.visible()); event.stopImmediatePropagation();
+                console.log($(this).attr('data-column'))
+                if (column.visible()) {
+                    $(this).removeClass('btn-default').addClass('btn-success');
+                }
+                else {
+                    $(this).removeClass('btn-success').addClass('btn-default');
+                }
+
+            });
+
+            var table = $('.exportDatatable2').DataTable();
+
+            table.columns().every(function () {
+                var data = this.data();
+                $('[data-column="22"]');
+            });
+
+                $(".filters").find(".removeColumn").each(function (event) {
+                    var column = table.column($(this).attr('data-column'));
+                    console.log($(this).attr('data-column'))
+                    if (column.visible()) {
+                        $(this).removeClass('btn-default').addClass('btn-success');
+                    }
+                    else {
+                        $(this).removeClass('btn-success').addClass('btn-default');
+                    }
+                });
+
+        });
+
+
+        function saveSettings() {
+            $('.settings').modal('hide');
+
+            var key = 'DataTables_DataTables_Table_0_/Contacts/ContactExport';
+            var aValue = localStorage.getItem(key);
+            $.ajax({
+                type: "POST",
+                url: "/Contacts/SaveExportSettings",
+                data: {
+                    'CampaignId': $('#CampaignId').val(),
+                    'Key': key,
+                    'Value': aValue,
+                    'Name': $('#Name').val(),
+                },
+
+                success: function (data) {
+                    $('#Name').val('');
+                    $('.settings').modal('hide');
+
+                    swal({
+                        title: 'Settings saved succesfuly.',
+                        icon: "success",
+                        buttons: {
+                            catch: {
+                                text: "Ok!",
+                                value: true,
+                                className: "btn-success"
+                            }
+                        }
+                    })
+                },
+                error: function (data) {
+                    $(data.responseJSON).each(function (i, element) {
+                        toastr.error(element);
+                    });
+                }
+            });
+        }
+
+
+
+        $("#CampaignId").change(function () {
+
+            $.ajax({
+                type: "GET",
+                url: "/Contacts/GetExportSettings",
+                datatype: "text/json",
+                traditional: true,
+                data: {
+                    CampaignId: $('#CampaignId').val(),
+                },
+                success: function (result, i) {
+                    $('#ExportSettingsId').empty();
+
+                    if (result.length <= 0) {
+                        $('#ExportSettingsId').append($("<option>").attr('value', -1).text("No Saved Settings for this campaign"));
+                        return;
+                    }
+
+                    $(result).each(function () {
+                        $('#ExportSettingsId').append($("<option>").attr('value', this.Id).text(this.Name));
+                    });
+                }
+            });
+        });
+    </script>
+}

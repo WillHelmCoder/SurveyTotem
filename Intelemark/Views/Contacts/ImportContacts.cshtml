@@ -1,0 +1,266 @@
+﻿@model Intelemark.Models.ImportModel
+
+@{
+    ViewBag.Title = "Import List of Contacts";
+}
+
+<style>
+    .dropzone {
+        min-height: 650px;
+        border: 2px dashed #666EE8;
+        background: #F4F5FA;
+    }
+</style>
+
+<section id="description" class="card">
+    <div class="card-header">
+        <h4 class="card-title">Instructions</h4>
+    </div>
+    <div class="card-content" style="margin-top: -1.7%;">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-8 card-text">
+                    <ul>
+                        <li>You can add as many columns as needed and store any information on them, but the file must specify the following columns: <b>Full Name</b> and (<b>Phone Number, Zip Code or State</b>) (Upper or Lower case)</li>
+                        <li>The file format must be <b>.xlsx</b> (older versions of excel may not work properly)</li>
+                        <li>You can download and use the base format file below and add all the information needed.</li>
+                        <li>You can upload 1 file at a time.</li>
+                        <li>You have to select a file and drag and drop it or choose it from your files before the upload.</li>
+                        <li>Against current database will compare the filters against the campaign that you selected on the current upload.</li>
+                        <li>You must select the project that this list of contacts will be linked to.</li>
+                        <li>The system will find and determine the time zone of the contact by Zip Code, Area Code and State (in that order).</li>
+                        <li>If the system can't determine the time zone it will try to determine it with the predefined column in the Base Format: <b>"Time Zone"</b> (more info. on the right)</li>
+                    </ul>
+                </div>
+
+                <div class="col-4 card-text">
+                    <span class="text-bold-700 ml-2">** Codes for Time Zones:</span>
+                    <ul>
+                        <li><b>AT</b> for Atlantic Time</li>
+                        <li><b>ET</b> for Eastern Time</li>
+                        <li><b>CT</b> for Central Time</li>
+                        <li><b>MT</b> for Mountain Time</li>
+                        <li><b>AZ</b> for Arizona Time</li>
+                        <li><b>PT</b> for Pacific Time</li>
+                        <li><b>AKT</b> for Alaska Time</li>
+                        <li><b>HAT</b> for Hawaii-Aleutian Time</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-2 card-text">
+                    <span class="text-bold-700 ml-2"> The Standard Fields for every contact are:</span>
+                    <ul>
+                        <li>Name</li>
+                        <li>PhoneNumber</li>
+                        <li>AltPhoneNumber</li>
+                    </ul>
+                </div>
+
+                <div class="col-2 card-text">
+                    <ul class="mt-1">
+                        <li>Email</li>
+                        <li>Address</li>
+                        <li>City</li>
+                    </ul>
+                </div>
+
+                <div class="col-2 card-text">
+                    <ul class="mt-1">
+                        <li>State</li>
+                        <li>Country</li>
+                        <li>ZipCode</li>
+                    </ul>
+                </div>
+
+
+                <div class="col-2 card-text">
+                    <ul class="mt-1">
+                        <li>Title</li>
+                        <li>Company</li>
+                        <li>AltAddress</li>
+                        
+                    </ul>
+                </div>
+
+                <div class="col-2 card-text">
+                    <ul class="mt-1">
+                        <li>Extension</li>
+                        <li>SIC </li>
+                        <li>Notes </li>
+                    </ul>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="dropzone-examples">
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-warning" role="alert">
+                <strong>Warning!</strong> Don’t forget to double check the format before uploading.
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="alert alert-success" role="alert">
+                <strong>Remember</strong> to select the category from the contact list.
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-content collapse show">
+                <div class="card-body mb-5">
+                    <form action="ImportContacts" method="post" class="dropzone dropzone-area dz-clickable" id="my-awesome-dropzone">
+                        <div class="row">
+                            <h4 class="ml-2"><strong>Filters:</strong></h4>
+                        </div>
+                        <div class="row skin skin-square mt-2 mb-2">
+
+                            <div class="col-md-2">
+                                @Html.CheckBoxFor(m => m.CompanyChecked, new { @class = "", @id = "Company" })
+                                <label for="Company" class="">Company</label>
+                                <br />
+                                @Html.CheckBoxFor(m => m.NameChecked, new { @class = "", @id = "Name" })
+                                <label for="Name" class="">Name</label>
+                                <br />
+                                @Html.CheckBoxFor(m => m.TitleChecked, new { @class = "", @id = "Title" })
+                                <label for="Title" class="">Title</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                @Html.CheckBoxFor(m => m.AddressChecked, new { @class = "", @id = "Address" })
+                                <label for="Address" class="">Address</label>
+                                <br />
+                                @Html.CheckBoxFor(m => m.AltAddressChecked, new { @class = "", @id = "AltAddress" })
+                                <label for="AltAddress" class="">Address Line 2</label>
+                                <br />
+                                @Html.CheckBoxFor(m => m.ExtensionChecked, new { @class = "", @id = "Extension" })
+                                <label for="Extension" class="">Extension</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                @Html.CheckBoxFor(m => m.CityChecked, new { @class = "", @id = "City" })
+                                <label for="City" class="">City</label>
+                                <br />
+                                @Html.CheckBoxFor(m => m.StateChecked, new { @class = "", @id = "State" })
+                                <label for="State" class="">State</label>
+                                <br />
+                                @Html.CheckBoxFor(m => m.CountryChecked, new { @class = "", @id = "Country" })
+                                <label for="Country" class="">Country</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                @Html.CheckBoxFor(m => m.PhoneNumberChecked, new { @class = "", @id = "PhoneNumber" })
+                                <label for="PhoneNumber" class="">Phone Number</label>
+                                <br />
+                                @Html.CheckBoxFor(m => m.AltPhoneNumberChecked, new { @class = "", @id = "AltPhoneNumber" })
+                                <label for="AltPhoneNumber" class="">Alt. Phone Number</label>
+                                <br />
+                                @Html.CheckBoxFor(m => m.ZipCodeChecked, new { @class = "", @id = "ZipCode" })
+                                <label for="ZipCode" class="">Zip Code</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                @Html.CheckBoxFor(m => m.EmailChecked, new { @class = "", @id = "Email" })
+                                <label for="Email" class="">Email</label>
+
+                                <br /><br />
+                                <label for="AgainstDatabase" class=""><b>Settings:</b></label><br />
+                                @Html.CheckBoxFor(m => m.AgainstDatabase, new { @class = "", @id = "AgainstDatabase" })
+                                <label for="AgainstDatabase" class="">Against current Database</label>
+
+                            </div>
+
+                            <div class="col-md-2">
+                                <input type="submit" name="DownloadFormat" formaction="DownloadFormat" class="btn btn-info" value="Download Base Format" />
+                                <br />
+                                <br />
+                                <button type="submit" formmethod="post" class="btn btn-success">Submit data and files!</button>
+                            </div>
+
+
+                        </div>
+
+                        <div class="col-md-12 mb-5">
+                            <label><b>Campaign - Project:</b></label>
+                            @Html.DropDownList("ProjectId", null, new { @class = "form-control select2" })
+                        </div>
+                        <div class="dz-default dz-message"><span>Drop files here to upload</span></div>
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/Scripts/app-assets/vendors/js/extensions/dropzone.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/app-assets/js/scripts/extensions/dropzone.js" type="text/javascript"></script>
+    <script>
+            Dropzone.options.myAwesomeDropzone = { // The camelized version of the ID of the form element
+                autoProcessQueue: false,
+                uploadMultiple: false,
+                parallelUploads: 1,
+                acceptedFiles: '.xlsx',
+                maxFiles: 1,
+                timeout: 1200000,
+
+                // The setting up of the dropzone
+                init: function () {
+                    var myDropzone = this;
+
+                    // First change the button to actually tell Dropzone to process the queue.
+                    this.element.querySelector("button[type=submit]").addEventListener("click", function (e) {
+                        // Make sure that the form isn't actually being sent.
+
+                        if (myDropzone.getAcceptedFiles().length > 0) {
+                        $.blockUI({
+                            message: '<div class="ft-refresh-cw icon-spin white font-large-1"></div>  <div style="color: white;"><strong>Uploading...</strong></div>',
+                                overlayCSS: {
+                                  //  backgroundColor: '#FFF',
+                                    opacity: 0.6,
+                                    cursor: 'wait'
+                                },
+                                css: {
+                                    border: 0,
+                                    padding: 0,
+                                    backgroundColor: 'transparent'
+                                }
+                            });
+                        }
+                        else {
+                            toastr["error"]("Please choose an accepted file and click on submit.", "Error");
+                        }
+
+
+                        e.preventDefault();
+                        e.stopPropagation();
+                        myDropzone.processQueue();
+                    });
+                },
+
+                success: function () {
+                        window.location.replace("@Url.Action("ImportResult","Contacts")");
+                },
+
+                error: function () {
+                    $.unblockUI();
+                }
+
+            }
+    </script>
+}

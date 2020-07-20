@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Intelemark.Models.StateRestrictionModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">State Restriction List</h4>
+            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+        </div>
+        <div class="card-content collapse show">
+            <div class="card-body">
+                <table class="table table-striped table-hover table-bordered zero-configuration dataTable table-dataTables">
+                    <thead>
+                        <tr>
+                            <th width="100">
+                                @Html.DisplayNameFor(model => model.Abbreviation)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th width="100">
+                                @Html.DisplayNameFor(model => model.IsRestricted)
+                            </th>
+                            <th width="100">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Abbreviation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IsRestricted)
+                                </td>
+                                <td>
+                                    @Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-circle btn-warning la la-pencil", title = "Edit", data_toggle = "tooltip" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+

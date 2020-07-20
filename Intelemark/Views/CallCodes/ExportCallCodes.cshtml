@@ -1,0 +1,160 @@
+﻿@model Intelemark.Models.CallCodeExportViewModel
+@{
+    ViewBag.Title = "ExportCallCodes";
+}
+<head>
+    <style>
+        .select2 {
+            width: 100% !important;
+        }
+    </style>
+</head>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <section id="description" class="card">
+        <div class="card-header">
+            <h4 class="card-title">Call Code Export</h4>
+            <hr />
+        </div>
+        <div class="card-content" style="margin-top: -1.7%;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-10 card-text">
+                        <p>
+                            Here you can export call code from one campaign to another.
+                        </p>
+                        <p>
+                            Just select the campaign you want to export the call codes from, and the campaign you are importing them to.
+                        </p>
+                    </div>
+                    <div class="col-md-2 form-actions pull-right text-center">
+                        <a href="@Url.Action("Index", "Projects")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+                        <button id="btnsubmit" class="btn btn-success">
+                            <i class="la la-check-square-o"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card full-height">
+                <div class="card-header">
+                    <h4 class="card-title">Export from</h4>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <div class="form-body">
+                            <div class="row">
+                                @Html.DropDownListFor(m => Model.ExportId, new SelectList(ViewBag.CampaignId, "Id", "Identifier"), htmlAttributes: new { @class = "form-control select2 exportFromId" })
+                                @Html.ValidationMessageFor(model => model.ExportId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="row mt-2">
+                                <table class="table table-striped table-hover" id="exportFromTable">
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Field</th>
+                                    </tr>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card full-height">
+                <div class="card-header">
+                    <h4 class="card-title">Export To</h4>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <div class="form-body">
+                            <div class="row">
+                                @Html.DropDownListFor(m => Model.InNOutMonsterFries, new SelectList(ViewBag.CampaignId, "Id", "Identifier"), htmlAttributes: new { @class = "form-control select2" })
+                                @Html.ValidationMessageFor(model => model.InNOutMonsterFries, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="row mt-2">
+                                <table class="table table-striped table-hover" id="exportToTable">
+                                    <tr>
+                                        <th>Field</th>
+                                        <th>Field</th>
+                                    </tr>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#ExportId").change(function () {
+            var CampaignId = $(this).val();
+            $('#TableRow').css("visibility", "visible");
+
+            $('#exportFromTable').DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "destroy": true,
+                "ajax": {
+                    type: "POST",
+                    url: "/CallCodes/GetCallCodes",
+                    datatype: "json",
+                    traditional: true,
+                    data: { CampaignId: CampaignId }
+                },
+                "columns": [
+                    { "data": "Name" },
+                    { "data": "Description" },
+                ]
+            });
+        });
+
+
+
+        $("#InNOutMonsterFries").change(function () {
+            var CampaignId = $(this).val();
+            $('#TableRow').css("visibility", "visible");
+
+            $('#exportToTable').DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "destroy": true,
+                "ajax": {
+                    type: "POST",
+                    url: "/CallCodes/GetCallCodes",
+                    datatype: "json",
+                    traditional: true,
+                    data: { CampaignId: CampaignId }
+                },
+                "columns": [
+                    { "data": "Name" },
+                    { "data": "Description" },
+                ]
+            });
+        });
+
+    });
+
+</script>

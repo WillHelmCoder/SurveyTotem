@@ -1,0 +1,207 @@
+﻿@{
+    ViewBag.Title = "Data Inventory by TimeZone";
+}
+<style>
+    .small-td {
+        width: 1px;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        text-align: center;
+    }
+</style>
+<div class="col-md-12">
+    <div id="loader" class="card">
+        <div class="card-header">
+            <div class="body text-center">
+                <i style="font-size: 30px;" class="la la-spinner la-spin"></i>
+                <span style="font-size: 30px;">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <div id="table-container" class="card hidden">
+        <div class="card-content collapse show">
+            <div class="card-body">
+                <table class="table table-striped table-hover table-bordered" style="width:100%">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    <script>
+        $(function () {
+
+            var table = $('table');
+
+            var load = () => {
+                var request = $.get({
+                    url: `/api/v2/admin/reports/data-inventory-timezone`,
+                    type: 'GET'
+                });
+
+                request.done((response) => {
+
+                    if (!response) {
+                        toastr["error"]("Request failed", "Error");
+                        return false;
+                    }
+
+                    if (!response.Data || !response.Data.length) {
+                        toastr["error"]("Request failed", "Error");
+                        return false;
+                    }
+
+                    $('#loader').remove();
+                    $('#table-container').removeClass('hidden');
+                    init(response);
+                });
+
+                request.fail((response) => {
+                    toastr["error"](response.Error || 'Error!', "Error");
+                });
+            };
+            var init = (response) => {
+
+                var data = [];
+                $.each(response.Data, (i, timeZone) => {
+
+                    data.push({
+                        TimeZoneId: timeZone.Id,
+                        Campaign: '',
+                        Project: `${timeZone.Name} total`,
+                        Name: '',
+                        Attempt0: timeZone.Detail.Attempt0,
+                        Attempt1: timeZone.Detail.Attempt1,
+                        Attempt2: timeZone.Detail.Attempt2,
+                        Attempt3: timeZone.Detail.Attempt3,
+                        Attempt4: timeZone.Detail.Attempt4,
+                        Attempt5: timeZone.Detail.Attempt5,
+                        Attempt6: timeZone.Detail.Attempt6,
+                        MoreThan6: timeZone.Detail.MoreThan6,
+                        Callbacks: timeZone.Callbacks,
+                        Final: timeZone.Detail.Final,
+                        Hold: timeZone.Detail.Hold,
+                        Total: timeZone.Detail.Total,
+                        Penetration: `${timeZone.Penetration}%`
+                    });
+
+                    $.each(timeZone.Data, (i, project) => {
+
+                        data.push({
+                            ProjectId: project.Id,
+                            Campaign: project.Campaign,
+                            Project: project.Name,
+                            Name: timeZone.Name,
+                            Attempt0: project.Detail.Attempt0,
+                            Attempt1: project.Detail.Attempt1,
+                            Attempt2: project.Detail.Attempt2,
+                            Attempt3: project.Detail.Attempt3,
+                            Attempt4: project.Detail.Attempt4,
+                            Attempt5: project.Detail.Attempt5,
+                            Attempt6: project.Detail.Attempt6,
+                            MoreThan6: project.Detail.MoreThan6,
+                            Callbacks: project.Callbacks,
+                            Final: project.Detail.Final,
+                            Hold: project.Detail.Hold,
+                            Total: project.Detail.Total,
+                            Penetration: `${project.Penetration}%`
+                        });
+                    });
+
+                });
+
+                data.push({
+                    Grand: true,
+                    Campaign: 'GRAND TOTAL',
+                    Project: '',
+                    Name: '',
+                    Attempt0: response.Detail.Attempt0,
+                    Attempt1: response.Detail.Attempt1,
+                    Attempt2: response.Detail.Attempt2,
+                    Attempt3: response.Detail.Attempt3,
+                    Attempt4: response.Detail.Attempt4,
+                    Attempt5: response.Detail.Attempt5,
+                    Attempt6: response.Detail.Attempt6,
+                    MoreThan6: response.Detail.MoreThan6,
+                    Callbacks: response.Callbacks,
+                    Final: response.Detail.Final,
+                    Hold: response.Detail.Hold,
+                    Total: response.Detail.Total,
+                    Penetration: `${response.Penetration}%`
+                });
+
+                var columns = [
+                    { title: 'Campaign', data: 'Campaign', searchable: true, responsivePriority: 1 },
+                    { title: 'Project', data: 'Project', searchable: true, responsivePriority: 1 },
+                    { title: 'TimeZone', data: 'Name', searchable: true, responsivePriority: 1 },
+                    { title: '0 Att', data: 'Attempt0', searchable: false, className: 'small-td', responsivePriority: 2 },
+                    { title: '1', data: 'Attempt1', searchable: false, className: 'small-td', responsivePriority: 2 },
+                    { title: '2', data: 'Attempt2', searchable: false, className: 'small-td', responsivePriority: 2 },
+                    { title: '3', data: 'Attempt3', searchable: false, className: 'small-td', responsivePriority: 2 },
+                    { title: '4', data: 'Attempt4', searchable: false, className: 'small-td', responsivePriority: 2 },
+                    { title: '5', data: 'Attempt5', searchable: false, className: 'small-td', responsivePriority: 2 },
+                    { title: '6', data: 'Attempt6', searchable: false, className: 'small-td', responsivePriority: 2 },
+                    { title: '> 6', data: 'MoreThan6', searchable: false, className: 'small-td', responsivePriority: 2 },
+                    { title: 'Callbacks', data: 'Callbacks', searchable: false, className: 'small-td', responsivePriority: 2 },
+                    { title: 'Final', data: 'Final', searchable: false, className: 'small-td', responsivePriority: 2 },
+                    { title: 'Hold', data: 'Hold', searchable: false, className: 'small-td', responsivePriority: 2 },
+                    { title: 'Total', data: 'Total', searchable: false, className: 'small-td', responsivePriority: 3 },
+                    { title: 'Penetration', data: 'Penetration', searchable: false, className: 'small-td', responsivePriority: 3 }
+                ];
+
+                var datatable = table.DataTable({
+                    columns: columns,
+                    order: [],
+                    aaData: data,
+                    sScrollY: '500px',
+                    sScrollX: '100%',
+                    sScrollXInner: '100%',
+                    width: '100%',
+                    searching: true,
+                    bPaginate: false,
+                    responsive: true,
+                    ordering: false,
+                    scrollCollapse: false,
+                    stateSave: false,
+                    smart: false,
+                    autoWidth: true,
+                    info: true,
+                    destroy: true,
+                    sDom: '<"top"iBf>t<"bottom"><"clear">',
+                    createdRow: function (row, data, dataIndex) {
+
+                        if (data.TimeZoneId)
+                            $(row).addClass('bg-yellow bg-lighten-5 text-bold-700');
+
+                        if (data.Grand)
+                            $(row).addClass('bg-primary bg-lighten-1 text-white text-bold-700');
+
+                    },
+                    buttons: [
+                        {
+                            extend: 'collection',
+                            text: 'Export',
+                            background: true,
+                            buttons: [
+                                { extend: 'copy', text: 'Copy', className: 'copyButton' },
+                                { extend: 'excel', text: 'Excel', filename: 'Excel Report', title: 'Excel' },
+                                { extend: 'csv', text: 'CSV', filename: 'CSV Report', title: 'CSV' },
+                                { extend: 'print', text: 'Print', filename: 'Printed Report', title: 'Print' },
+                                { extend: 'pdf', text: 'PDF', filename: 'PDF Report', title: 'PDF' },
+                            ]
+                        }
+                    ]
+
+                });
+
+            };
+
+            load();
+
+        });
+
+    </script>
+}

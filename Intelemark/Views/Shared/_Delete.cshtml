@@ -1,0 +1,23 @@
+﻿@model Object
+<div class="modal fade @Model" data- tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger white">
+                <h3 class="modal-title white">Are you sure you want to delete?</h3>
+            </div>
+            <div class="modal-body">
+                <h5>Changes will be permanent.</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                @Html.ActionLink("Delete", "Delete", new { id = @Model }, new { @class = "btn btn-danger", title = "Delete", data_toggle = "tooltip" })
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

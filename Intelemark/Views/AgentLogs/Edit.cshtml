@@ -1,0 +1,65 @@
+﻿@model Intelemark.Models.AgentLogModel
+
+@{
+    /**/
+
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Agent Logs Edit</h4>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <form class="form">
+                        <div class="form-body">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.DialingHours)
+                                        @Html.EditorFor(model => model.DialingHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Dialing Hours on this campaign" } })
+                                        @Html.ValidationMessageFor(model => model.DialingHours, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.TrainingHours)
+                                        @Html.EditorFor(model => model.TrainingHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Training Hours this campaign" } })
+                                        @Html.ValidationMessageFor(model => model.TrainingHours, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Successes)
+                                        @Html.EditorFor(model => model.Successes, new { htmlAttributes = new { @class = "form-control", @placeholder = "Successes of the day on this campaign" } })
+                                        @Html.ValidationMessageFor(model => model.Successes, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions pull-right">
+                                <a href="@Url.Action("Index", "AgentLogs")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="la la-check-square-o"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

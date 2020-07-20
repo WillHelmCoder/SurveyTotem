@@ -1,0 +1,109 @@
+﻿@model Intelemark.Models.FormModel
+@using Intelemark.Utilities;
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Form Details</h4>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <form class="form">
+                        <div class="form-body">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <h4 class="form-section"><i class="ft-settings"></i> Basic Information</h4>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <h4>@Html.LabelFor(model => model.Name)</h4>
+                                        <h4><strong>@Html.DisplayFor(model => model.Name)</strong></h4>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <h4> @Html.LabelFor(model => model.Description)</h4>
+                                        <h4> <strong>@Html.DisplayFor(model => model.Description)</strong></h4>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <h4> @Html.LabelFor(model => model.Campaign)</h4>
+                                        <h4> <strong>@Model.Campaign.Identifier - @Model.Campaign.Description</strong></h4>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <h4 class="form-section mt-2"><i class="ft-bar-chart"></i> Form Body</h4>
+
+                            <div class="row">
+                                <table class="table  table-hover table-bordered ">
+                                    <thead class="bg-primary white">
+                                    <th width="200">
+                                        Type
+                                    </th>
+                                    <th width="350">
+                                        Questions
+                                    </th>
+                                    <th>
+                                        Answer(s)
+                                    </th>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.QuestionList)
+                                        {
+                                            <tr class="bg-yellow bg-lighten-5 font-weight-bold">
+                                                <td>
+                                                    @item.TypeId.GetDisplayName()
+                                                </td>
+                                                <td>
+                                                    @item.Question
+                                                </td>
+                                                <td></td>
+
+                                               @foreach (var ans in item.AnswerList)
+                                                {
+                                            <tr class="">
+                                                <td></td>
+                                                <td></td>
+                                                <td>
+                                                    @ans.Answer
+                                                </td>
+                                            </tr>
+                                            }
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                            <div class="form-actions pull-right">
+                                <a href="@Url.Action("Index", "Forms")" class="btn btn-primary mr-1"> <i class="la la-arrow-circle-left"></i> Back to List</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+}
+
+

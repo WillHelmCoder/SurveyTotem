@@ -1,0 +1,261 @@
+﻿@model Intelemark.Models.UserCampaignModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Join User with Campaign</h4>
+        </div>
+        <div class="card-content collapse show">
+            <div class="card-body">
+                <form class="form">
+                    <div class="form-body">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.UserId)
+                                    @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control select2", @id = "UserId" })
+                                    @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CampaignId)
+                                    @Html.DropDownList("CampaignId", null, "Select Campaign", htmlAttributes: new { @class = "form-control select2 Campaignddl", @id = "CampaignId" })
+                                    @Html.ValidationMessageFor(model => model.CampaignId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PayRateTrainingHours)
+                                    @Html.EditorFor(model => model.PayRateTrainingHours, new { htmlAttributes = new { @class = "form-control", @type = "number", @placeholder = "Pay Rate for Dialing Hours", @id = "PayRateTrainingHours" } })
+                                    @Html.ValidationMessageFor(model => model.PayRateTrainingHours, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PayRateDialingHours)
+                                    @Html.EditorFor(model => model.PayRateDialingHours, new { htmlAttributes = new { @class = "form-control", @type = "number", @placeholder = "Pay Rate for Dialing Hours", @id = "PayRateDialingHours" } })
+                                    @Html.ValidationMessageFor(model => model.PayRateDialingHours, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PayRateSuccess)
+                                    @Html.EditorFor(model => model.PayRateSuccess, new { htmlAttributes = new { @class = "form-control", @type = "number", @placeholder = "Pay Rate for Successes", @id = "PayRateSuccess" } })
+                                    @Html.ValidationMessageFor(model => model.PayRateSuccess, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.BudgetedHours)
+                                    @Html.EditorFor(model => model.BudgetedHours, new { htmlAttributes = new { @class = "form-control", @type = "number", @placeholder = "Budgeted Hours for this campaign.", @id = "BudgetedHours" } })
+                                    @Html.ValidationMessageFor(model => model.BudgetedHours, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="TableRow" style="visibility: hidden;">
+                            <div class="col-md-12">
+                                <table id="ProjectsList" class="table table-striped table-hover table-bordered dataTable table-dataTables">
+                                    <thead>
+                                        <tr>
+                                            <th width="200">
+                                                Project Name
+                                            </th>
+                                            <th>
+                                                Description
+                                            </th>
+                                            <th width="100">
+                                                Active
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="mt-2 mb-2 pull-right">
+                    <a href="@Url.Action("Index", "UserCampaigns")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+                    <button onclick="SaveChanges();" id="BtnSaveChanges" class="btn btn-success">
+                        <i class="la la-check-square-o"></i> Create
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts
+{
+    <script>
+
+        $("#UserId").change(function () {
+            $(this).prop("disabled", true);
+        });
+
+
+        $(".Campaignddl").change(function () {
+            var CampaignId = $(this).val();
+            //$(this).prop("disabled", true);
+
+            $('#TableRow').css("visibility", "visible");
+
+            $('#ProjectsList').DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "destroy": true,
+                "ajax": {
+                    type: "POST",
+                    url: "/UserCampaigns/GetProjects",
+                    datatype: "json",
+                    traditional: true,
+                    data: { CampaignId: CampaignId }
+                },
+                "columns": [
+                    { "data": "Name" },
+                    { "data": "Description" },
+                    {
+                        data: "Id",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return '<input type="checkbox" class="editor-active" checked name="' + data + '">';
+                            }
+                            return data;
+                        },
+                        className: "dt-body-center"
+                    }
+                ]
+            });
+        });
+
+        function SaveChanges() {
+            arrayForms = [];
+
+            $('table [type="checkbox"]').each(function (i, chk) {
+                if (chk.checked) {
+                    arrayForms.push($(chk).attr("name"));
+                }
+            });
+
+            if ($('#PayRateDialingHours').val() == "" || $('#PayRateTrainingHours').val() == "" || $('#PayRateSuccess').val() == "" || $('#BudgetedHours').val() == "") {
+                swal("Error!", "You have to fill all the information before submitting.", "error")
+                return;
+            }
+
+            if (arrayForms.length <= 0) {
+                swal("Error!", "You have to select at least one Project from the selected campaign.", "error")
+                return;
+            }
+
+
+            $.blockUI({
+                message: '<div class="ft-refresh-cw icon-spin white font-large-1"></div>  <div style="color: white;"><strong>Please wait...</strong></div>',
+                overlayCSS: {
+                    //  backgroundColor: '#FFF',
+                    opacity: 0.6,
+                    cursor: 'wait'
+                },
+                css: {
+                    border: 0,
+                    padding: 0,
+                    backgroundColor: 'transparent'
+                }
+            });
+
+
+            $.ajax({
+                type: "POST",
+                url: "/UserCampaigns/Create",
+                datatype: "text/json",
+                traditional: true,
+                data: {
+                    CampaignId: $('#CampaignId').val(),
+                    UserId: $('#UserId').val(),
+                    PayRateDialingHours: $('#PayRateDialingHours').val(),
+                    PayRateTrainingHours: $('#PayRateTrainingHours').val(),
+                    PayRateSuccess: $('#PayRateSuccess').val(),
+                    BudgetedHours: $('#BudgetedHours').val(),
+                    ProjectIds: arrayForms,
+                },
+                success: function (result) {
+                    window.location.replace("@Url.Action("Index","UserCampaigns")")
+                },
+
+                error: function () {
+                    $.unblockUI();
+                    overwriteConfirmation();
+                }
+
+
+            });
+        }
+
+
+
+        function overwriteConfirmation() {
+            swal({
+                title: 'User already assigned, do you want to overwrite these settings?.',
+                //text: "",
+                icon: "warning",
+                buttons: {
+                    check: {
+                        text: "Yes, overwrite.",
+                        className: "btn-warning",
+                        value: false
+                    },
+                    catch: {
+                        text: "Cancel",
+                        value: true,
+                        className: "btn-success"
+                    }
+                }
+            })
+                .then((value) => {
+                    if (value) {
+                        window.location.replace("@Url.Action("Index","UserCampaigns")");
+                    }
+                    else {
+                           $.ajax({
+                type: "POST",
+                url: "/UserCampaigns/Create",
+                datatype: "text/json",
+                traditional: true,
+                data: {
+                    CampaignId: $('#CampaignId').val(),
+                    UserId: $('#UserId').val(),
+                    PayRateDialingHours: $('#PayRateDialingHours').val(),
+                    PayRateTrainingHours: $('#PayRateTrainingHours').val(),
+                    PayRateSuccess: $('#PayRateSuccess').val(),
+                    BudgetedHours: $('#BudgetedHours').val(),
+                    confirmOverwite: 1,
+                    ProjectIds: arrayForms,
+                },
+                     success: function (result) {
+                    window.location.replace("@Url.Action("Index","UserCampaigns")")
+                    },
+
+            });
+                    }
+                });
+        }
+    </script>
+}

@@ -1,0 +1,200 @@
+﻿@model IEnumerable<Intelemark.Models.ExtraFieldModel>
+
+@{
+    /**/
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Create Dynamic Fields</h4>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <form class="form">
+                        <div class="form-body">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <h4 class="form-section"><i class="ft-user-plus"></i> Basic Information</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Campaign</label>
+                                        @Html.DropDownList("CampaignId", null, htmlAttributes: new { @class = "form-control select2" })
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 class="form-section"><i class="ft-user-plus"></i> Extra Field Builder</h4>
+                            <div class="row">
+                                <div class="repeater col-md-12">
+                                    <div data-repeater-list="outer-list">
+                                        <div data-repeater-item class="form-control form-group">
+                                            <div class="row mt-2">
+                                                <div class="col-md-2">
+                                                    <select class="form-control" id="TypeId" name="TypeId">
+                                                        <option value="0" selected>Text</option>
+                                                        <option value="1">Selectable Option</option>
+                                                        <option value="2">Date Option</option>
+                                                        <option value="3">Date Time Option</option>
+                                                        <option value="4">Time Option Time</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-8">
+                                                    <input type="text" name="FieldName" placeholder="Field" id="FieldName" class="form-control" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button data-repeater-delete class="btn btn-danger btn-xs" type="button" value="Delete Question"><i class="ft-x"></i> Field</button>
+                                                    @*<button onclick="FalseButon(this);" class="addAnswer btn btn-success btn-xs" type="button" value="Delete Question"><i class="ft-plus"></i> Field Option</button>*@
+                                                </div>
+                                                <br />
+                                                <br />
+                                                <br />
+                                                <br />
+                                            </div>
+                                            <!-- innner repeater -->
+                                            <div class="inner-repeater ">
+                                                <div data-repeater-list="ExtraFieldOptions" name="ExtraFieldOptions" class="drag">
+                                                    <div data-repeater-item style="display:none;" class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-md-10">
+                                                                <input type="text" name="FieldOptionName" class="form-control" placeholder="Field Option" id="FieldOptionName" value="----AnswerHidden----" />
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <button data-repeater-delete type="button" class="btn btn-danger btn-xs" value="Delete"><i class="ft-x"></i></button>
+                                                                <span class="btn btn-warning btn-xs" value="Order"><i class="ft-move"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @*<button data-repeater-create type="button" class="hiddenAdd btn btn-warning btn-xs pull-right" style="visibility:hidden;" value="Add Answer"><i class="ft-plus"></i> Answer</button>*@
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <hr />
+                                    <br />
+                                    <button data-repeater-create type="button" class="btn btn-success btn-xs block" value="Add Question"><i class="ft-plus"></i>New Extra Field</button>
+                                </div>
+                                <!-- outer repeater -->
+                            </div>
+
+                            <div class="form-actions pull-right">
+                                <a href="@Url.Action("Index", "Contacts")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+                                <button type="button" onclick="saveData();" class="btn btn-success">
+                                    <i class="la la-check-square-o"></i> Create
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<script>
+
+</script>
+
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            //   BotonFalso();
+            $('.repeater').repeater({
+                show: function () {
+                    $(this).slideDown();
+                },
+                defaultValues: {
+                    'TypeId': '0'
+                },
+                isFirstItemUndeletable: true,
+                repeaters: [{
+                    show: function () {
+                        $(this).slideDown();
+                    },
+                    selector: '.inner-repeater'
+                }]
+            });
+        });
+
+
+        $(".drag").sortable({
+            axis: "y",
+            cursor: 'pointer',
+            opacity: 0.5,
+            placeholder: "row-dragging",
+            delay: 150,
+            update: function (event, ui) {
+                console.log('repeaterVal');
+                console.log(repeater.repeaterVal());
+                console.log('serializeArray');
+                console.log($('form').serializeArray());
+            }
+        }).disableSelection();
+
+        function FalseButon(button) {
+            var x = $(button).parent().parent().parent().find(".inner-repeater > .hiddenAdd");
+            x.click();
+            $(".drag").sortable({
+                axis: "y",
+                cursor: 'pointer',
+                opacity: 0.5,
+                placeholder: "row-dragging",
+                delay: 150,
+                update: function (event, ui) {
+                    console.log('repeaterVal');
+                    console.log(repeater.repeaterVal());
+                    console.log('serializeArray');
+                    console.log($('form').serializeArray());
+                }
+            }).disableSelection();
+        }
+
+        function saveData() {
+            var arr = Object.values($('.repeater').repeaterVal());
+            $.ajax({
+                type: "POST",
+                url: "/Contacts/CreateExtraFields",
+                data: {
+                    'CampaignId': $('#CampaignId').val(),
+                    'model': arr[0]
+                },
+                success: function (data) {
+                    swal({
+                        title: data,
+                        icon: "success",
+                        buttons: {
+                            catch: {
+                                text: "Ok!",
+                                value: true,
+                                className: "btn-success"
+                            }
+                        }
+
+                    })
+                        .then((value) => {
+                            if (value) {
+                                window.location.replace("/Contacts/Index");
+                            }
+                        });
+                },
+                error: function (data) {
+                    $(data.responseJSON).each(function (i, element) {
+                        toastr.error(element);
+                    });
+                }
+            });
+        }
+
+    </script>
+}

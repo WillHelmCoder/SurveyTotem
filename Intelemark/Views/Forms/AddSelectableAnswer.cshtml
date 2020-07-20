@@ -1,0 +1,156 @@
+﻿@model Intelemark.Models.SelectableAnswerViewModel
+
+@{ViewBag.Title = "Add Selectable Answer"; }
+
+@using (Html.BeginForm())
+{
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Add a Selectable Answer</h4>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <form class="form" action="AddSelectableAnswer">
+                        <div class="form-body">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Campaign</label>
+                                        @Html.DropDownList("CampaignId", null, "Select a Campaign", htmlAttributes: new { @class = "form-control select2", @id = "CampaignId" })
+                                        @Html.ValidationMessageFor(model => model.CampaignId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Form</label>
+                                        @Html.DropDownList("FormId", null, "Select a Form", htmlAttributes: new { @class = "form-control select2", @id = "FormId" })
+                                        @Html.ValidationMessageFor(model => model.CampaignId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Question</label>
+                                        @Html.DropDownList("QuestionId", null, "Select a Question", htmlAttributes: new { @class = "form-control select2", @id = "QuestionId" })
+                                        @Html.ValidationMessageFor(model => model.CampaignId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.NewAnswer)
+                                        @Html.EditorFor(model => model.NewAnswer, new { htmlAttributes = new { @class = "form-control", @placeholder = "New available answer for this question." } })
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-actions pull-right">
+                                <a href="@Url.Action("Index", "Home")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="la la-check-square-o"></i> Create
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#CampaignId").change(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Forms/GetForms",
+                datatype: "text/json",
+                traditional: true,
+                data: {
+                    CampaignId: $('#CampaignId').val(),
+                },
+                success: function (result, i) {
+                    $('#FormId').empty();
+
+                    if (result.length <= 0) {
+                        $('#FormId').append($("<option>").attr('value', -1).text("No forms on this campaign."));
+                        return;
+                    }
+
+                    $(result).each(function () {
+                        $('#FormId').append($("<option>").attr('value', this.Id).text(this.Name));
+                    });
+
+                    if (result.length == 1) {
+                        var formId = $('#FormId').val();
+                        console.log(formId);
+                        callForce(formId);
+                    }
+
+                  
+                }
+            });
+        });
+
+        $("#FormId").change(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Forms/GetQuestions",
+                datatype: "text/json",
+                traditional: true,
+                data: {
+                    FormId: $('#FormId').val(),
+                },
+                success: function (result, i) {
+                    $('#QuestionId').empty();
+
+                    if (result.length <= 0) {
+                        $('#QuestionId').append($("<option>").attr('value', -1).text("No questions on this form."));
+                        return;
+                    }
+
+                    $(result).each(function () {
+                        $('#QuestionId').append($("<option>").attr('value', this.Id).text(this.Name));
+                    });
+                }
+            });
+        });
+
+        function callForce(formId) {
+            $.ajax({
+                type: "GET",
+                url: "/Forms/GetQuestions",
+                datatype: "text/json",
+                traditional: true,
+                data: {
+                    FormId: formId,
+                },
+                success: function (result, i) {
+                    $('#QuestionId').empty();
+
+                    if (result.length <= 0) {
+                        $('#QuestionId').append($("<option>").attr('value', -1).text("No questions on this form."));
+                        return;
+                    }
+
+                    $(result).each(function () {
+                        $('#QuestionId').append($("<option>").attr('value', this.Id).text(this.Name));
+                    });
+                }
+            });
+        }
+
+    });
+
+
+</script>

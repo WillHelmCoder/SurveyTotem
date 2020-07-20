@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Intelemark.Models.AppointmentModel>
+@{
+    ViewBag.Title = " Upcoming Callbacks";
+}
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Forms List</h4>
+            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+            <div class="heading-elements">
+                <ul class="list-inline mb-0"></ul>
+            </div>
+        </div>
+        <div class="card-content collapse show">
+            <div class="card-body">
+                <table class="table table-striped table-hover table-bordered zero-configuration dataTable table-dataTables">
+                    <thead>
+                        <tr>
+                            <th>
+                                Company
+                            </th>
+                            <th>
+                                Contact
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Notes)
+                            </th>
+                            <th>
+                                Date
+                            </th>
+                            <th width="100">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Record.Contact.Company)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Record.Contact.Name) - @Html.DisplayFor(modelItem => item.Record.Contact.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Notes)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateScheduled) - @Session["TimeZoneName"]
+                            </td>
+                            <td>
+                                @Html.ActionLink(" ", "Details", "Forms", new { id = item.Record.FormId}, new { @class = "btn btn-sm btn-circle btn-primary la la-bars", title = "Form Details", data_toggle = "tooltip" })
+                                @Html.ActionLink(" ", "Module", new { id = item.Record.FormId, contactId = item.Record.ContactId, callbackId = item.Id }, new { @class = "btn btn-sm btn-circle btn-warning la la-arrow-right", title = "Go to record", data_toggle = "tooltip" })
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

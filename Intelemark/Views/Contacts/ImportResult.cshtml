@@ -1,0 +1,238 @@
+﻿@{
+    ViewBag.Title = "Imports Result";
+
+    List<Intelemark.Models.ContactModel> Models = TempData["Model"] as List<Intelemark.Models.ContactModel>;
+    bool hasErrors;
+    bool hasSuccesses;
+
+    if (@Models.Where(x => !String.IsNullOrEmpty(x.Error)).Count() > 0)
+    {
+        hasErrors = true;
+    }
+    else
+    {
+        hasErrors = false;
+    }
+
+    if (@Models.Where(x => String.IsNullOrEmpty(x.Error)).Count() > 0)
+    {
+        hasSuccesses = true;
+    }
+    else
+    {
+        hasSuccesses = false;
+    }
+}
+
+
+<form action="DownloadImportResult" method="POST">
+    <section id="dropzone-examples">
+
+        <div class="row mb-2">
+            <div class="col-8"></div>
+            <div class="col-4">
+                @if (hasErrors)
+                {
+                    <input type="submit" class="btn btn-warning pull-right ml-1" value="Download Contacts With Errors" />
+                }
+                @if (hasSuccesses)
+                {
+                    <input type="submit" name="DownloadSuccesfulContacts" formaction="DownloadSuccesfulContacts" class="btn btn-primary pull-right" value="Download Succesful Contacts" />
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Import Result</h4>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                @if (hasSuccesses)
+                                {
+                                    <li>
+                                        <input type="submit" name="ConfirmUploadContacts" id="ConfirmUploadContacts" onclick="blockScreen();" formaction="ConfirmUploadContacts" class="btn btn-success" value="Confirm and Upload Contacts" />
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card-content collapse show">
+                        <div class="card-body mb-5">
+                            <div class="card-block">
+                                <ul class="nav nav-tabs">
+                                    @if (hasSuccesses)
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="base-tab1" data-toggle="tab" aria-controls="tab1" href="#tab1" aria-expanded="false">Succesfully Inserted Contacts</a>
+                                        </li>
+                                    }
+                                    @if (hasErrors)
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="base-tab2" data-toggle="tab" aria-controls="tab2" href="#tab2" aria-expanded="false">Not Inserted Contacts</a>
+                                        </li>
+                                    }
+                                </ul>
+                                <div class="tab-content px-1 pt-1">
+                                    <div role="tabpanel" class="tab-pane active" id="tab1" aria-expanded="false" aria-labelledby="base-tab1">
+                                        <div class="col-md-12 mb-5">
+                                            <table class="table table-striped table-hover table-bordered zero-configuration dataTable table-dataTables">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Name
+                                                        </th>
+                                                        <th>
+                                                            Phone Number
+                                                        </th>
+                                                        <th>
+                                                            Email
+                                                        </th>
+                                                        <th>
+                                                            City
+                                                        </th>
+                                                        <th>
+                                                            Zip Code
+                                                        </th>
+                                                        <th>
+                                                            Message
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Models.Where(x => String.IsNullOrEmpty(x.Error)))
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Name)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Email)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.City)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.ZipCode)
+                                                            </td>
+                                                            <td>
+                                                                Successfully Inserted
+                                                            </td>
+
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    @if (hasErrors)
+                                    {
+                                        <div class="tab-pane" id="tab2" aria-labelledby="base-tab2" aria-expanded="false">
+                                            <div class="col-md-12 mb-5">
+                                                <table class="table table-striped table-hover table-bordered zero-configuration dataTable table-dataTables">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                Name
+                                                            </th>
+                                                            <th>
+                                                                Phone Number
+                                                            </th>
+                                                            <th>
+                                                                Email
+                                                            </th>
+                                                            <th>
+                                                                City
+                                                            </th>
+                                                            <th>
+                                                                Zip Code
+                                                            </th>
+                                                            <th>
+                                                                Error
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Models.Where(x => !String.IsNullOrEmpty(x.Error)))
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Name)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Email)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.City)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.ZipCode)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Error)
+                                                                </td>
+
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <a href="@Url.Action("Index", "Contacts")" class="btn btn-warning mr-1"> <i class="la la-arrow-left"></i> Back to List</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+@section Scripts {
+    <script type="text/javascript">
+        if (@Models.Where(x => !String.IsNullOrEmpty(x.Error)).Count() > 0) {
+            swal({
+                title: "We added (@Models.Where(x => String.IsNullOrEmpty(x.Error)).Count()), We couldn't add (@Models.Where(x => !String.IsNullOrEmpty(x.Error)).Count()) of your contacts ",
+                text: "You can see the report that we generated for you on the table below, you can also download it in excel format.",
+                icon: "warning"
+            });
+        }
+        else
+        {
+            swal("Good job!", "Your list of contacts was succesfully uploaded.", "success")
+        }
+
+
+        function blockScreen() {
+            $.blockUI({
+                message: '<div class="ft-refresh-cw icon-spin white font-large-1"></div>  <div style="color: white;"><strong>Saving Contacts...</strong></div>',
+                overlayCSS: {
+                    //  backgroundColor: '#FFF',
+                    opacity: 0.6,
+                    cursor: 'wait'
+                },
+                css: {
+                    border: 0,
+                    padding: 0,
+                    backgroundColor: 'transparent'
+                }
+            });
+        }
+
+
+    </script>
+}

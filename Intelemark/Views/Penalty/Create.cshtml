@@ -1,0 +1,72 @@
+﻿@model Intelemark.Models.PenaltyModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Add Penalties</h4>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <form class="form">
+                        <div class="form-body">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <h4 class="form-section"><i class="ft-flag"></i> Penalty Settings</h4>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.PayRate)
+                                        @Html.EditorFor(model => model.PayRate, new { htmlAttributes = new { @class = "form-control", @placeholder="Hourly Pay Rate - Example $10.00", @type="number", @step="any" } })
+                                        @Html.ValidationMessageFor(model => model.PayRate, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.From)
+                                        @Html.EditorFor(model => model.From, new { htmlAttributes = new { @class = "form-control",  @placeholder = "% of hours worked from their budgeted hours", @type = "number", @step = "any" } })
+                                        @Html.ValidationMessageFor(model => model.From, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.To)
+                                        @Html.EditorFor(model => model.To, new { htmlAttributes = new { @class = "form-control", @placeholder = "% of hours worked to their budgeted hours", @type = "number", @step = "any" } })
+                                        @Html.ValidationMessageFor(model => model.To, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.PenaltyFee)
+                                        @Html.EditorFor(model => model.PenaltyFee, new { htmlAttributes = new { @class = "form-control", @placeholder = "The penalty that will apply to this settings.", @type = "number", @step = "any" } })
+                                        @Html.ValidationMessageFor(model => model.PenaltyFee, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions pull-right">
+                            <a href="@Url.Action("Index", "Penalty")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="la la-check-square-o"></i> Create
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

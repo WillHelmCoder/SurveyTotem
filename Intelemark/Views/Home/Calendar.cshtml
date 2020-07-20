@@ -1,0 +1,187 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Calendar";
+}
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/css/plugins/calendars/fullcalendar.min.css">
+</head>
+
+
+@if (User.IsInRole("Admin"))
+{
+    <div class="row">
+        <div class="col-md-12 mb-2">
+            <button class="btn btn-primary la la-calendar btn-sm pull-right" data-toggle="modal" data-target=".appointmentModal"></button>
+            @Html.Partial("~/Views/Shared/_Appointment.cshtml", new Intelemark.Models.AppointmentModel { IsConfirmed = true }, new ViewDataDictionary { { "UserId", ViewBag.UserId }, { "CampaignId", ViewBag.CampaignId } })
+        </div>
+    </div>
+}
+
+<section id="basic-examples">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Events</h4>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0"></ul>
+                    </div>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <p class="card-text">
+                            This is your calendar for the next days, remember to come back and check it every day.
+                        </p>
+                        <div id="calendar" class="fc fc-unthemed fc-ltr"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+@Html.Partial("~/Views/Shared/_ReScheduleAppointment.cshtml", new Intelemark.Models.AppointmentModel { }, new ViewDataDictionary { { "UserId", ViewBag.UserId }, { "CampaignId", ViewBag.CampaignId } })
+
+
+@section Scripts {
+    <script src="~/Scripts/app-assets/vendors/js/extensions/moment.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/app-assets/vendors/js/extensions/fullcalendar.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/app-assets/js/scripts/extensions/fullcalendar.js" type="text/javascript"></script>
+
+
+    <script>
+
+
+        $("#Submit").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Home/SaveAppointment",
+                datatype: "text/json",
+                traditional: true,
+                data: {
+                    AgentId: $('#UserId').val(),
+                    DateScheduled: $('#DateScheduled').val(),
+                    Notes: $('#Notes').val(),
+                    CampaignId: $('#CampaignId').val(),
+                },
+                success: function (result) {
+                  window.location.replace("@Url.Action("Calendar","Home")");
+                }
+            });
+        });
+
+
+        
+        $("#SubmitReschedule").click(function () {
+           $.ajax({
+                type: "POST",
+                url: "/Home/RescheduleAppointment",
+                datatype: "text/json",
+                traditional: true,
+                data: {
+                    Id: $('#HdnId').val(),
+                    DateScheduled: $('#DateReScheduled').val(),
+                    Notes: $('#NotesRescheduled').val(),
+                },
+                success: function (result) {
+                  window.location.replace("@Url.Action("Calendar","Home")");
+                }
+            });
+        });
+
+
+        function Confirm(Id) {
+            swal({
+                title: 'Do you want to confirm this appointment?',
+                text: "If so, click yes!",
+                icon: "warning",
+                buttons: {
+                    check: {
+                        text: "Nope!",
+                        className: "text-white",
+                        className: "btn-danger",
+                        value: false
+                    },
+                    catch: {
+                        text: "Yes, confirm.",
+                        value: true,
+                        className: "btn-success"
+                    }
+                }
+
+            })
+                .then((value) => {
+                    if (value) {
+                        $.ajax({
+                            url: '/Home/ConfirmAppointment',
+                            type: 'POST',
+                            data: {Id : Id},
+                            success: function (data) {
+                                  window.location.replace("@Url.Action("Calendar","Home")");
+                            }
+                        });
+                    }
+                });
+        }
+
+         function ReSchedule(Id) {
+            swal({
+                title: 'Do you want to cancel this appointment?',
+                text: "If so, click yes!",
+                icon: "warning",
+                buttons: {
+                    check: {
+                        text: "Reschedule",
+                        className: "text-white",
+                        className: "btn-danger",
+                        value: "ReSchedule"
+                    },
+                    catch: {
+                        text: "Yes, cancel.",
+                        value: "Cancel",
+                        className: "btn-success"
+                    }
+                }
+
+            })
+                .then((value) => {
+                    if (value == "Cancel") {
+                        $.ajax({
+                            url: '/Home/CancelAppointment',
+                            type: 'POST',
+                            data: {Id : Id},
+                            success: function (data) {
+                                  window.location.replace("@Url.Action("Calendar","Home")");
+                            }
+                        });
+                    }
+                    else if (value == "ReSchedule") {
+                        $('#HdnId').val(Id);
+                        $(".rescheduleappointmentModal").modal();
+                    }
+                });
+        }
+
+
+        $.ajax({
+            url: '/Home/GetAppointments',
+            type: 'GET',
+            data: {    },
+            success: function (data) {
+                var events = [];
+                $('#calendar').fullCalendar({
+                    events: data,
+                    timeFormat: 'hh:mmt',
+                    eventLimit: true,
+                });
+
+            }
+        });
+
+
+
+    </script>
+}

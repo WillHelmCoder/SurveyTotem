@@ -1,0 +1,91 @@
+﻿@model Intelemark.Models.CallCodeModel
+
+@{
+                /**/
+
+                ViewBag.Title = "Create";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Create Call Code</h4>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <form class="form">
+                        <div class="form-body">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <h4 class="form-section"><i class="ft-flag"></i> General Information</h4>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Name)
+                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Call Code Description" } })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Code)
+                                        @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @placeholder = "End of call Code" } })
+                                        @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Behavior</label>
+                                        @Html.EnumDropDownListFor(model => model.Behavior, htmlAttributes: new { @class = "form-control select2", @id = "CampaignId", @style = "width: 100%" })
+                                        @Html.ValidationMessageFor(model => model.Behavior, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Campaign</label>
+                                        @Html.DropDownList("CampaignId", null, "Select Campaign", htmlAttributes: new { @class = "form-control select2", @id = "CampaignId", @style = "width: 100%" })
+                                        @Html.ValidationMessageFor(model => model.Campaign, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 skin skin-square">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.IsSuccess)
+                                        <br />
+                                        @Html.CheckBoxFor(m => m.IsSuccess, new { @id = "chkSuccess" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions pull-right">
+                                <a href="@Url.Action("Index", "CallCodes")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="la la-check-square-o"></i> Create
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@section Scripts {
+}

@@ -1,0 +1,85 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        if (User.IsInRole("Agent"))
+        {
+            <span class="mr-1">
+                Campaign:  @Session["CampaignName"]
+            </span>
+
+
+            <span class="mr-1">
+                Time Zone:  @Session["TimeZoneName"]
+            </span>
+
+            <span class="mr-1">
+                Project:  @Session["ProjectName"]
+            </span>
+        }
+
+        <span class="mr-1">
+            Hello,
+            @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "user-name text-bold-700" })
+        </span>
+
+        <span class="mr-1 text-bold-700">
+            @if (User.IsInRole("Agent"))
+            {
+                <a onclick="agentLogOff();">Log Off</a>
+            }
+            else
+            {
+                <a href="javascript:document.getElementById('logoutForm').submit()">Log Off</a>
+            }
+
+        </span>
+    }
+}
+else
+{
+
+    <span class="mr-1">
+        @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+    </span>
+
+    <span class="mr-1">
+        @Html.ActionLink("Login", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+    </span>
+
+}
+
+
+<script>
+    function agentLogOff() {
+        swal({
+            title: 'Is this your final log off?',
+            //text: "",
+            icon: "warning",
+            buttons: {
+                check: {
+                    text: "Yes, log my day",
+                    className: "btn-warning",
+                    value: false
+                },
+                catch: {
+                    text: "No",
+                    value: true,
+                    className: "btn-success"
+                }
+            }
+        })
+            .then((value) => {
+                if (value) {
+                    window.location.replace("javascript:document.getElementById('logoutForm').submit()");
+                }
+                else {
+                    window.location.replace("/AgentLogs/Create");
+                }
+            });
+    }
+
+</script>

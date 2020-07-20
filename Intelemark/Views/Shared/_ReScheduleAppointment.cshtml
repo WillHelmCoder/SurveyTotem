@@ -1,0 +1,69 @@
+﻿@model Intelemark.Models.AppointmentModel
+<link href="~/Scripts/app-assets/css/plugins/datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+<div class="modal fade rescheduleappointmentModal" data- tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success white">
+                <h3 class="modal-title white">When is it going to happen?</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DateScheduled)
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.DateScheduled, null, new { @readonly = "readonly", @aria_readonly = "false", @class = "form-control col-md-11 datetimepicker", @id = "DateReScheduled", @placeholder = "Select a date", @value = "hola" })
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <span class="la la-calendar-o datetimepickeraction"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Notes)
+                            @Html.TextAreaFor(model => model.Notes, new { @class = "form-control", @placeholder = "Type a comment if needed", @rows = "5", @id="NotesRescheduled" })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger text-white" data-dismiss="modal">Cancel</button>
+                <input type="submit" class="btn btn-success text-white" id="SubmitReschedule" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="HdnId"/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="~/Scripts/app-assets/js/scripts/datetimepicker/jquery.datetimepicker.full.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $('.datetimepicker').datetimepicker({
+            lang: 'en',
+            step: 30
+        });
+
+        $('.datetimepicker').val('');
+
+        jQuery('.datetimepickeraction').click(function () {
+            $(this).closest('.input-group').find('.datetimepicker').datetimepicker('show');
+        });
+
+        jQuery('.datetimepickeraction').click(function () {
+            $(this).closest('.input-group').find('.datetimepicker').datetimepicker('show');
+        });
+
+        $('.datetimepicker').val('');
+    });
+
+</script>

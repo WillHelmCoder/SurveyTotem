@@ -1,0 +1,194 @@
+﻿@using Intelemark.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Iniciar sesión";
+    Layout = null;
+}
+
+<head>
+    <title>Intelemark :: Admin</title>
+    <link rel="icon" sizes="16x16 32x32 64x64" href="/wp-content/themes/intelemark/images/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="196x196" href="/wp-content/themes/intelemark/images/favicon/favicon-192.png">
+    <link rel="icon" type="image/png" sizes="160x160" href="/wp-content/themes/intelemark/images/favicon/favicon-160.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/wp-content/themes/intelemark/images/favicon/favicon-96.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/wp-content/themes/intelemark/images/favicon/favicon-64.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/wp-content/themes/intelemark/images/favicon/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/wp-content/themes/intelemark/images/favicon/favicon-16.png">
+    <link rel="apple-touch-icon" href="/wp-content/themes/intelemark/images/favicon/favicon-57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/wp-content/themes/intelemark/images/favicon/favicon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/wp-content/themes/intelemark/images/favicon/favicon-72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/wp-content/themes/intelemark/images/favicon/favicon-144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/wp-content/themes/intelemark/images/favicon/favicon-60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/wp-content/themes/intelemark/images/favicon/favicon-120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/wp-content/themes/intelemark/images/favicon/favicon-76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/wp-content/themes/intelemark/images/favicon/favicon-152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/wp-content/themes/intelemark/images/favicon/favicon-180.png">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Quicksand:300,400,500,700" rel="stylesheet">
+    <link href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome.min.css" rel="stylesheet">
+    <!-- BEGIN VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/css/vendors.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/vendors/css/extensions/toastr.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/css/app.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/assets/css/style.css">
+    <!-- END MODERN CSS-->
+    <!-- BEGIN Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/css/core/menu/menu-types/vertical-menu-modern.css">
+    <!-- END Page Level CSS-->
+    <!-- BEGIN Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/assets/css/style.css">
+    <!-- END Custom CSS-->
+
+</head>
+
+<style>
+    body {
+        overflow: hidden;
+    }
+
+    .loaded .bg {
+        opacity: 1;
+    }
+
+    .bg {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        will-change: opacity;
+        transition: 1s opacity ease-out;
+        polygon{
+        opacity: 0;
+        transform-origin: center center;
+    }
+
+     
+</style>
+
+
+<body class="vertical-layout vertical-content-menu 1-column   menu-expanded blank-page blank-page"
+      data-open="click" data-menu="vertical-content-menu" data-col="1-column">
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+
+    <div class="app-content content">
+        <div class="content-wrapper">
+            <div class="content-header row"></div>
+            <div class="content-body">
+                <section class="flexbox-container">
+                    <div class="col-12 d-flex align-items-center justify-content-center">
+                        <div class="col-md-4 col-10 box-shadow-2 p-0">
+                            <div class="card border-grey border-lighten-3 m-0">
+                                <div class="card-header border-0">
+                                    <div class="card-title text-center">
+                                        <div class="p-1">
+                                            <img src="~/Content/Images/IntelemarkLogo.png" alt="SurveyTotem Logo" width="200">
+                                        </div>
+                                    </div>
+                                    <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2">
+                                        <span>Login</span>
+                                    </h6>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <section id="loginForm">
+                                            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                                                <div class="form-group position-relative has-icon-left mb-0">
+                                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-lg input-lg", @placeholder = "Your Username" })
+                                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                                    <div class="form-control-position">
+                                                        <i class="ft-user" style="position: absolute; margin-top:10px;"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group position-relative has-icon-left">
+                                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control form-control-lg input-lg", @placeholder = "Enter Password" })
+                                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                                    <div class="form-control-position">
+                                                        <i class="la la-key" style="position: absolute; margin-top:10px;"></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-md-12 col-12 text-center text-md-right">
+                                                        <div class="checkbox">
+                                                            @Html.CheckBoxFor(m => m.RememberMe, new { @class = "chk-remember" })
+                                                            Remember Me
+                                                        </div>
+                                                    </div>
+                                                  @*  <div class="col-md-6 col-12 text-center text-md-right"><a href="#" class="card-link">Forgot Password?</a></div>*@
+                                                </div>
+
+
+                                                <button type="submit" class="btn btn-info btn-lg btn-block"><i class="ft-unlock"></i> Login</button>
+
+
+                                            }
+                                        </section>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="">
+                                       @* <p class="float-sm-right text-center m-0"><a href="#" class="card-link">Recover password</a></p>*@
+                                       @* <p class="float-sm-right text-center m-0">New to Intelemark? <a href="/Account/Register" class="card-link">Sign Up</a></p>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+
+    
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        const $polygons = $('.bg > polygon');
+
+        const ANIM = {
+            duration: 0.6,
+            stagger: 0.005,
+
+            from: {
+                opacity: 0,
+                scale: 0,
+                transformOrigin: 'center center',
+                force3D: true
+            },
+
+            to: {
+                opacity: 1,
+                scale: 1,
+                ease: Elastic.ease,
+                force3D: true
+            }
+        };
+
+        const timeline = new TimelineMax({
+            delay: 0,
+            repeat: 0,
+            //repeatDelay: 0.5,
+            yoyo: true
+        });
+
+
+        timeline.staggerFromTo($polygons, ANIM.duration, ANIM.from, ANIM.to, ANIM.stagger, 0);
+        //TweenMax.staggerFromTo(polygons, ANIM.duration, ANIM.from, ANIM.to, ANIM.stagger);
+
+        $('body').addClass('loaded');
+    });
+</script>
+

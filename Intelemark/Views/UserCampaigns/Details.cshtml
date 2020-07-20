@@ -1,0 +1,74 @@
+﻿@model Intelemark.Models.UserCampaignModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>UserCampaignModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Campaign.Identifier)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Campaign.Identifier)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PayRateTrainingHours)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PayRateTrainingHours)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PayRateDialingHours)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PayRateDialingHours)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PayRateSuccess)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PayRateSuccess)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BudgetedHours)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BudgetedHours)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProjectId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProjectId)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

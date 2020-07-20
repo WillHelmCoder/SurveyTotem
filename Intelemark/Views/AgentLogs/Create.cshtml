@@ -1,0 +1,109 @@
+﻿@model Intelemark.Models.AgentLogModel
+
+@{
+    /**/
+
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Create Log</h4>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <form class="form">
+                        <h4 class="form-section"><i class="ft-flag"></i> Log Information for this Campaign</h4>
+                        <div class="form-body">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.UserId)
+                                        @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control select2", @id = "UserId" })
+                                        @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Project)
+                                        @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "form-control select2 Campaignddl", @id = "ProjectId" })
+                                        @Html.ValidationMessageFor(model => model.ProjectId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CampaignId)
+                                        @Html.DropDownList("TimeZoneId", null, htmlAttributes: new { @class = "form-control select2 Campaignddl", @id = "TimeZoneId" })
+                                        @Html.ValidationMessageFor(model => model.TimeZoneId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <strong>@Html.LabelFor(model => model.Date)</strong>
+                                        <div class="input-group">
+                                            @Html.TextBoxFor(m => m.Date, "{0:MM/dd/yyyy}", new { @class = "form-control pickadate-dropdown picker__input", @placeholder = "Select a Date" })
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <span class="la la-calendar-o"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.DialingHours)
+                                        @Html.EditorFor(model => model.DialingHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Dialing Hours on this campaign" } })
+                                        @Html.ValidationMessageFor(model => model.DialingHours, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.TrainingHours)
+                                        @Html.EditorFor(model => model.TrainingHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "Training Hours this campaign" } })
+                                        @Html.ValidationMessageFor(model => model.TrainingHours, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Successes)
+                                        @Html.EditorFor(model => model.Successes, new { htmlAttributes = new { @class = "form-control", @placeholder = "Successes of the day on this campaign" } })
+                                        @Html.ValidationMessageFor(model => model.Successes, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions pull-right">
+                                <a href="@Url.Action("Index", "AgentLogs")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="la la-check-square-o"></i> Create
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

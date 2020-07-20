@@ -1,0 +1,171 @@
+﻿@model IEnumerable<Intelemark.Models.ContactModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+@if (User.IsInRole("Admin"))
+{
+    <form action="/Contacts/Index" enctype="multipart/form-data" method="post">
+        <div class="col-md-12 col-sm-12">
+            <div class="card border-left-blue border-right-blue">
+                <div class="card-header">
+                    <div class="body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <strong>@Html.Label("Select a Campaign")</strong>
+                                    @Html.DropDownList("CampaignId", null, htmlAttributes: new { @class = "form-control select2", @id = "CampaignId", @style = "width: 100%" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                            <div class="col-md-3 pull-right">
+                                <strong>@Html.Label("Filter")</strong>
+                                <button type="submit" class="btn btn-success text-white form-control">
+                                    <i class="la la-check-square-o"></i> Filter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+
+<div class="col-12 col-md-12 col-sm-12 col-xs-12 col-lg-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Contacts List</h4>
+            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+            <div class="heading-elements">
+                <ul class="list-inline mb-0">
+                    <li><a href="@Url.Action("Create", "Contacts")"> <i class="ft-plus-circle"></i> ADD</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-content collapse show">
+            <div class="card-body">
+                <table class="table table-striped table-hover table-bordered exportDatatable dataTable table-dataTables">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px !important">
+                                @Html.DisplayNameFor(model => model.Id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Company)
+                            </th>
+                            <th style="width: 50px !important">
+                                Campaign
+                            </th>
+                            <th>
+                                Project
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PhoneNumber)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.City)
+                            </th>
+                            <th width="50">
+                                @Html.DisplayNameFor(model => model.State)
+                            </th>
+
+                            <th width="150" class="noExport">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Company)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Project.Campaign.Identifier)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Project.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.City)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.State)
+                                </td>
+                                <td>
+                                    @Html.ActionLink(" ", "Index", "Records", new { id = item.Id }, new { @class = "btn btn-sm btn-circle btn-primary la la-bars", title = "Details", data_toggle = "tooltip" })
+                                    @Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-circle btn-warning la la-pencil", title = "Edit", data_toggle = "tooltip" })
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <button class="btn btn-danger la la-trash-o btn-sm" data-toggle="modal" data-target=".@item.Id"></button>
+                                        @Html.Partial("~/Views/Shared/_Delete.cshtml", item.Id)
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $(".exportDatatable").find("th").each(function (index, value) {
+                this.innerHTML += '<a class="removeColumn" data-column="' + index + '"><i class="la la-remove" style="font-size: 0.8rem !important;"></i></a>'
+            });
+
+            $(".removeColumn").click(function (event) {
+                var column = table.column($(this).attr('data-column'));
+                column.visible(!column.visible()); event.stopImmediatePropagation();
+            });
+
+            var table = $('.exportDatatable').DataTable();
+
+            table.on('column-reorder', function (e, settings, details) {
+                $(".exportDatatable").find(".removeColumn").each(function (index, value) {
+                    $(this).attr('data-column', index);
+                });
+            });
+           @if (User.IsInRole("Agent"))
+           {
+               <text>
+                 $(".btn.btn-secondary.buttons-collection.dropdown-toggle").css("display", "none")
+               </text>
+           }
+        });
+    </script>
+}

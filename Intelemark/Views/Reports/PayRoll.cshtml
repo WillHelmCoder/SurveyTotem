@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Intelemark.Models.Reports.PayRoll>
+
+@{
+    ViewBag.Title = "Payroll Worksheet";
+    var start = Model.FirstOrDefault()?.StartDate ?? DateTime.Now.AddDays(-1);
+    var end = Model.FirstOrDefault()?.EndDate ?? DateTime.Now;
+}
+
+
+<form action="/Reports/PayRoll" enctype="multipart/form-data" method="post">
+    <div class="col-md-12">
+        @Html.Partial("~/Views/Shared/_FilterReport.cshtml", new Intelemark.Models.Reports.BaseReportModel() { StartDate = start, EndDate = end }, new ViewDataDictionary() { { "CampaignId", ViewBag.CampaignId } })
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Payroll Worksheet</h4>
+                <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+
+                    <table class="table table-striped table-hover table-bordered dataTable ReportDatatable-NoOrder" data-title="Intelemark Payroll Worksheet">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Identifier
+                                </th>
+                                <th>
+                                    Agent
+                                </th>
+                                <th>
+                                    Dialing Hours
+                                </th>
+                                <th>
+                                    Training Hours
+                                </th>
+                                <th>
+                                    Budgeted Hours
+                                </th>
+                                <th>
+                                    % Met
+                                </th>
+                                <th>
+                                    Training
+                                </th>
+                                <th>
+                                    Dialing
+                                </th>
+                                <th>
+                                    Successes
+                                </th>
+                                <th>
+                                    Penalty
+                                </th>
+                                <th>
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserCampaign.Campaign.Identifier)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Agent.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReportedHours)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReportedTrainingHours)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalBudgetedHours)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HourPercentage)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TrainingCompensation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DialingCompensation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SuccessCompensation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Penalty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Total)
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+

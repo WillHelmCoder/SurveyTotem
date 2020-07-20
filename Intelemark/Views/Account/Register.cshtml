@@ -1,0 +1,114 @@
+﻿@model Intelemark.Models.RegisterViewModel
+@{ Layout = null; }
+
+<head>
+    <title>Intelemark :: Admin</title>
+    <link rel="icon" sizes="16x16 32x32 64x64" href="/wp-content/themes/intelemark/images/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="196x196" href="/wp-content/themes/intelemark/images/favicon/favicon-192.png">
+    <link rel="icon" type="image/png" sizes="160x160" href="/wp-content/themes/intelemark/images/favicon/favicon-160.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/wp-content/themes/intelemark/images/favicon/favicon-96.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/wp-content/themes/intelemark/images/favicon/favicon-64.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/wp-content/themes/intelemark/images/favicon/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/wp-content/themes/intelemark/images/favicon/favicon-16.png">
+    <link rel="apple-touch-icon" href="/wp-content/themes/intelemark/images/favicon/favicon-57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/wp-content/themes/intelemark/images/favicon/favicon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/wp-content/themes/intelemark/images/favicon/favicon-72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/wp-content/themes/intelemark/images/favicon/favicon-144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/wp-content/themes/intelemark/images/favicon/favicon-60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/wp-content/themes/intelemark/images/favicon/favicon-120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/wp-content/themes/intelemark/images/favicon/favicon-76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/wp-content/themes/intelemark/images/favicon/favicon-152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/wp-content/themes/intelemark/images/favicon/favicon-180.png">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Quicksand:300,400,500,700" rel="stylesheet">
+    <link href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome.min.css" rel="stylesheet">
+    <!-- BEGIN VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/css/vendors.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/vendors/css/extensions/toastr.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/css/app.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/assets/css/style.css">
+    <!-- END MODERN CSS-->
+    <!-- BEGIN Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/css/core/menu/menu-types/vertical-menu-modern.css">
+    <!-- END Page Level CSS-->
+    <!-- BEGIN Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/assets/css/style.css">
+    <!-- END Custom CSS-->
+
+</head>
+
+<style>
+    body {
+        overflow: hidden;
+    }
+
+    .loaded .bg {
+        opacity: 1;
+    }
+
+    .bg {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        will-change: opacity;
+        transition: 1s opacity ease-out;
+        polygon
+
+    {
+        opacity: 0;
+        transform-origin: center center;
+    }
+</style>
+<html>
+<body>
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+@Html.AntiForgeryToken()
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                            <h4 class="form-section"><i class="ft-user-plus"></i> Create your account</h4>
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Email, new { @class = "col-md-6 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email for the login for the user" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Password, new { @class = "col-md-6 control-label" })
+                                <div class="col-md-10">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Define a password for the user" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-6 control-label" })
+                                <div class="col-md-10">
+                                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Re-enter the password" })
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-actions pull-left">
+                                <a href="@Url.Action("AllUsers", "Account")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="la la-check-square-o"></i> Save
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>}
+
+</body>
+</html>

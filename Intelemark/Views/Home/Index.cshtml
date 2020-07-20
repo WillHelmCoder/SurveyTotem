@@ -1,0 +1,239 @@
+﻿@model Intelemark.Models.Reports.DailyActivityReportViewModel
+@{
+    ViewBag.Title = "Daily Activity Report";
+    var start = Model?.StartDate ?? DateTime.Now.AddDays(-1);
+    var end = Model?.EndDate ?? DateTime.Now;
+}
+
+<form action="/Home/Index" enctype="multipart/form-data" method="post">
+    <div class="content-body">
+        @Html.Partial("~/Views/Shared/_FilterReport.cshtml", new Intelemark.Models.Reports.BaseReportModel() { StartDate = start, EndDate = end }, new ViewDataDictionary() { { "CampaignId", ViewBag.CampaignId } })
+        <div class="row">
+            <div class="col-xl-3 col-lg-6 col-12">
+                <div class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="media-body text-left">
+                                    <h6 class="text-muted">Total Hours</h6>
+                                    <h3>@Model.TotalHours</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="icon-clock success font-large-2 float-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-12">
+                <div class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="media-body text-left">
+                                    <h6 class="text-muted">Total Successes</h6>
+                                    <h3>@Model.TotalSuccesses</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="icon-check warning font-large-2 float-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-12">
+                <div class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="media-body text-left">
+                                    <h6 class="text-muted">Total Contacts</h6>
+                                    <h3>@Model.TotalContacts</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="icon-user danger font-large-2 float-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-12">
+                <div class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="media-body text-left">
+                                    <h6 class="text-muted">Contacts Remaining</h6>
+                                    <h3>@Model.ContactRemaining</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="icon-call-in info font-large-2 float-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-4 mb-2">
+                <div class="card full-height">
+                    <div class="card-header">
+                        <h4 class="card-title">EOC Count</h4>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                @* <li><a href="#">Show all</a></li>*@
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content collapse show">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <tbody>
+                                        @foreach (var item in Model.CallCodes)
+                                        {
+                                            <tr>
+                                                <th scope="row" class="border-top-0">@item.Code - @item.Name</th>
+                                                <td class="border-top-0">@item.Count</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-8 col-md-8 mb-2">
+                <div class="card full-height">
+                    <div class="card-header">
+                        <h4 class="card-title">Contacts Status at the moment</h4>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0"></ul>
+                        </div>
+                    </div>
+                    <div class="card-content collapse show">
+                        <div class="card-body p-0">
+                            <iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px; height: 0px; margin: 0px; position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px;"></iframe>
+                            <canvas id="ChartDashboard" width="753" height="376" style="width: 80%; height: 80%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-xl-3 col-lg-6 col-12">
+                <div class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="media-body text-left">
+                                    <h6 class="text-muted">Contacts in Call Back</h6>
+                                    <h3>@Model.ContactsInCallBack</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="icon-paper-clip info font-large-2 float-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-12">
+                <div class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="media-body text-left">
+                                    <h6 class="text-muted">Contacts Completed</h6>
+                                    <h3>@Model.ContactsCompleted</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="icon-trophy danger font-large-2 float-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-12">
+                <div class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="media-body text-left">
+                                    <h6 class="text-muted">Total Dials</h6>
+                                    <h3>@Model.TotalDials</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="icon-heart warning font-large-2 float-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-12">
+                <div class="card pull-up">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="media-body text-left">
+                                    <h6 class="text-muted">Contacts In Hold</h6>
+                                    <h3>@Model.ContactsInHold</h3>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="icon-user success font-large-2 float-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section scripts {
+    <script src="~/Scripts/app-assets/js/scripts/pages/dashboard-sales.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ($('#ChartDashboard').length) {
+                var ctx = document.getElementById("ChartDashboard");
+                var mybarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ["Completed", "Call Back", "Remaining", "In Hold"],
+                        datasets: [{
+                            label: '# Number of Contacts',
+                            backgroundColor: "#26B99A",
+                            data: [@Model.ContactsCompleted, @Model.ContactsInCallBack, @Model.ContactRemaining, @Model.ContactsInHold]
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+            }
+        });
+    </script>
+}

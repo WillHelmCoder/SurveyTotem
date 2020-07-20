@@ -1,0 +1,471 @@
+﻿@model Intelemark.Models.ProjectManagementViewModel
+
+@{
+    /**/
+
+    ViewBag.Title = "Clone Project";
+}
+
+<link href="~/Scripts/app-assets/vendors/css/ui/dragula.min.css" rel="stylesheet" />
+<link href="~/Scripts/app-assets/vendors/css/tables/extensions/rowReorder.dataTables.min.css" rel="stylesheet" />
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <section id="description" class="card">
+        <div class="card-header">
+            <h4 class="card-title">@Model.Name - Filtering Settings</h4>
+            @Html.HiddenFor(x => x.Id, new { value = Model.Id, Id = "HdnProj" })
+            <hr />
+        </div>
+        <div class="card-content" style="margin-top: -1.7%;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-10 card-text">
+                        <p>
+                            Here you can check/uncheck filters from the project: @Model.Name, all the checked lists will be used by the Call Queue Manager.
+                            <br />Note: If you uncheck a filter, all the contacts that belong to this project with that setting will be put on <b>Hold</b>.
+                        </p>
+                    </div>
+                </div>
+                <div class="row pull-right">
+                    <div class="form-actions pull-right text-center mr-2">
+                        <a href="@Url.Action("Index", "Projects")" class="btn btn-warning mr-1"> <i class="la la-ban"></i> Cancel</a>
+                        <button id="btnsubmit" onclick="SaveChanges();" class="btn btn-success">
+                            <i class="la la-check-square-o"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card full-height">
+                <div class="card-header">
+                    <h4 class="card-title">Companies</h4>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <form class="form">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-hover table-bordered table-dataTables table-company">
+                                            <thead>
+                                                <tr>
+                                                    <th width="50">
+                                                        Include
+                                                    </th>
+                                                    <th>
+                                                        Company
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model.ProjectCompanies)
+                                                {
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="@item.Property" checked="@item.IsChecked" />
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Property)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card full-height">
+                <div class="card-header">
+                    <h4 class="card-title">Business Types/SICs</h4>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <form class="form">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-hover table-bordered table-dataTables table-sic ">
+                                            <thead>
+                                                <tr>
+                                                    <th width="50">
+                                                        Include
+                                                    </th>
+                                                    <th>
+                                                        SICs
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model.ProjectSICs)
+                                                {
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="@item.Property" checked="@item.IsChecked" />
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Property)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card  full-height">
+                <div class="card-header">
+                    <h4 class="card-title">Titles</h4>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <form class="form">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-hover table-bordered table-dataTables table-title">
+                                            <thead>
+                                                <tr>
+                                                    <th width="50">
+                                                        Include
+                                                    </th>
+                                                    <th>
+                                                        Titles
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.ProjectTitles)
+                                                {
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="@item.Property" checked="@item.IsChecked" />
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Property)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3 mb-3">
+
+        <div class="col-md-4">
+            <div class="card full-height">
+                <div class="card-header">
+                    <h4 class="card-title">Cities</h4>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <form class="form">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-hover table-bordered table-dataTables table-city">
+                                            <thead>
+                                                <tr>
+                                                    <th width="50">
+                                                        Include
+                                                    </th>
+                                                    <th>
+                                                        Cities
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model.ProjectCities)
+                                                {
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="@item.Property" checked="@item.IsChecked" />
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Property)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card full-height">
+                <div class="card-header">
+                    <h4 class="card-title">States</h4>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <form class="form">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-hover table-bordered table-dataTables table-state">
+                                            <thead>
+                                                <tr>
+                                                    <th width="50">
+                                                        Include
+                                                    </th>
+                                                    <th>
+                                                        States
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model.ProjectStates)
+                                                {
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="@item.Property" checked="@item.IsChecked" />
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Property)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card  full-height">
+                <div class="card-header">
+                    <h4 class="card-title">Time Zones</h4>
+                </div>
+                <div class="card-content collapse show">
+                    <div class="card-body">
+                        <form class="form">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-hover table-bordered table-dataTables table-timezone">
+                                            <thead>
+                                                <tr>
+                                                    <th width="50">
+                                                        Include
+                                                    </th>
+                                                    <th>
+                                                        Time Zones
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.ProjectTimeZones)
+                                                {
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="@item.TimeZone.Id" checked="@item.IsChecked" />
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelItem => item.Property)
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var table = $('.table-dataTables').DataTable({
+                "paging": false,
+                "info": false,
+                searching: true,
+                "dom": '<lf<t>ip>'
+            });
+        });
+
+        function SaveChanges() {
+            event.preventDefault();
+
+            ProjectCompanies = [];
+            ProjectSICs = [];
+            ProjectTitles = [];
+            ProjectCities = [];
+            ProjectStates = [];
+            ProjectTimeZones = [];
+
+            $('.table-company [type="checkbox"]').each(function (i, chk) {
+                if (chk.checked) {
+                    var x = {
+                        "Property": $(chk).attr("name"),
+                        "IsChecked": true,
+                    };
+                    ProjectCompanies.push(x);
+                }
+            });
+
+            $('.table-sic [type="checkbox"]').each(function (i, chk) {
+                if (chk.checked) {
+                    var x = {
+                        "Property": $(chk).attr("name"),
+                        "IsChecked": true,
+                    };
+                    ProjectSICs.push(x);
+                }
+            });
+
+            $('.table-title [type="checkbox"]').each(function (i, chk) {
+                if (chk.checked) {
+                    var x = {
+                        "Property": $(chk).attr("name"),
+                        "IsChecked": true,
+                    };
+                    ProjectTitles.push(x);
+                }
+            });
+
+            $('.table-city [type="checkbox"]').each(function (i, chk) {
+                if (chk.checked) {
+                    var x = {
+                        "Property": $(chk).attr("name"),
+                        "IsChecked": true,
+                    };
+                    ProjectCities.push(x);
+                }
+            });
+
+            $('.table-state [type="checkbox"]').each(function (i, chk) {
+                if (chk.checked) {
+                    var x = {
+                        "Property": $(chk).attr("name"),
+                        "IsChecked": true,
+                    };
+                    ProjectStates.push(x);
+                }
+            });
+
+            $('.table-timezone [type="checkbox"]').each(function (i, chk) {
+                if (chk.checked) {
+                    ProjectTimeZones.push($(chk).attr("name"));
+                }
+            });
+
+            console.log(ProjectTitles);
+            console.log(ProjectCompanies);
+            console.log(ProjectSICs);
+            console.log(ProjectStates);
+            console.log(ProjectCities);
+            console.log(ProjectTimeZones);
+
+
+            $.blockUI({
+                message: '<div class="ft-refresh-cw icon-spin white font-large-1"></div>  <div style="color: white;"><strong>Please wait...</strong></div>',
+                overlayCSS: {
+                    //  backgroundColor: '#FFF',
+                    opacity: 0.6,
+                    cursor: 'wait'
+                },
+                css: {
+                    border: 0,
+                    padding: 0,
+                    backgroundColor: 'transparent'
+                }
+            });
+
+
+            $.ajax({
+                type: "POST",
+                url: "/Projects/ProjectManagement",
+                datatype: "text/json",
+                data: {
+                    ProjectTitles: ProjectTitles,
+                    ProjectCompanies: ProjectCompanies,
+                    ProjectSICs: ProjectSICs,
+                    ProjectStates: ProjectStates,
+                    ProjectCities: ProjectCities,
+                    ProjectTimeZonesId: ProjectTimeZones,
+                    ProjectId: $('#HdnProj').val(),
+                    Name: $('#Name').val(),
+                    Description: $('#Description').val(),
+                },
+                success: function (result) {
+
+                    swal({
+                        title: 'The project management has been saved',
+                        icon: "success",
+                        buttons: {
+                            catch: {
+                                text: "Ok!",
+                                value: true,
+                                className: "btn-success"
+                            }
+                        }
+
+                    })
+                        .then((value) => {
+                            if (value) {
+                               window.location.replace("@Url.Action("Index","Projects")");
+                            }
+                        });
+                }
+            });
+        }
+
+    </script>
+}
