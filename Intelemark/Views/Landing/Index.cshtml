@@ -1,0 +1,96 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Intelemark :: Welcome</title>
+    <link rel="icon" sizes="16x16 32x32 64x64" href="/wp-content/themes/intelemark/images/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="196x196" href="/wp-content/themes/intelemark/images/favicon/favicon-192.png">
+    <link rel="icon" type="image/png" sizes="160x160" href="/wp-content/themes/intelemark/images/favicon/favicon-160.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/wp-content/themes/intelemark/images/favicon/favicon-96.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/wp-content/themes/intelemark/images/favicon/favicon-64.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/wp-content/themes/intelemark/images/favicon/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/wp-content/themes/intelemark/images/favicon/favicon-16.png">
+    <link rel="apple-touch-icon" href="/wp-content/themes/intelemark/images/favicon/favicon-57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/wp-content/themes/intelemark/images/favicon/favicon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/wp-content/themes/intelemark/images/favicon/favicon-72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/wp-content/themes/intelemark/images/favicon/favicon-144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/wp-content/themes/intelemark/images/favicon/favicon-60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/wp-content/themes/intelemark/images/favicon/favicon-120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/wp-content/themes/intelemark/images/favicon/favicon-76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/wp-content/themes/intelemark/images/favicon/favicon-152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/wp-content/themes/intelemark/images/favicon/favicon-180.png">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Quicksand:300,400,500,700" rel="stylesheet">
+    <link href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome.min.css" rel="stylesheet">
+    <!-- BEGIN VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/css/vendors.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/vendors/css/extensions/toastr.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/css/app.css">
+    <link rel="stylesheet" type="text/css" href="~/Scripts/assets/css/style.css">
+    <!-- END MODERN CSS-->
+    <!-- BEGIN Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/app-assets/css/core/menu/menu-types/vertical-menu-modern.css">
+    <!-- END Page Level CSS-->
+    <!-- BEGIN Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/assets/css/style.css">
+    <!-- END Custom CSS-->
+    <!-- BEGIN Own CSS-->
+    <link rel="stylesheet" type="text/css" href="~/Content/css/Landing.css">
+    <!-- END Own CSS-->
+</head>
+<body class="vertical-layout vertical-menu-modern 2-columns fixed-navbar pace-done pace-done menu-expanded">
+
+    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-semi-dark navbar-shadow d-block">
+        <div class="navbar-wrapper">
+            <div class="navbar-container content">
+                <div class="collapse navbar-collapse" id="navbar-mobile">
+                    <ul class="nav navbar-nav mr-auto float-left">
+                        <li class="nav-item d-none d-md-block"><span class="nav-link nav-link-expand"></span></li>
+                        <li class="dropdown nav-item mega-dropdown">
+                        </li>
+                        <li class="nav-item nav-search">
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav float-right">
+                        <li class="dropdown dropdown-user nav-item" style="margin-top:30px">
+                            @Html.Partial("_LoginPartial")
+                        </li>
+                        <li class="dropdown dropdown-language nav-item">
+                        </li>
+                        <li class="dropdown dropdown-notification nav-item">
+                        </li>
+                        <li class="dropdown dropdown-notification nav-item">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section>
+            <h1>Welcome to Intelemark</h1>
+    </section>
+
+    <section>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc aliquet mi at purus vulputate sodales.
+            Mauris consectetur porta ultrices. Integer in faucibus justo. Suspendisse potenti. Nulla nec massa elit. 
+            Donec ac suscipit erat. Proin cursus, tortor eu aliquet blandit, diam massa fermentum nisi, at fermentum
+            mi massa accumsan lectus. Maecenas sed mi sodales, auctor nisi eu, sodales mauris. Proin gravida vitae 
+            turpis et tincidunt. Integer ut sapien aliquam purus efficitur bibendum eget at nisi. Cras vitae dolor 
+            pulvinar, accumsan dui at, facilisis erat. Cras ipsum sem, facilisis vel maximus at, ullamcorper quis est.
+            Quisque tincidunt scelerisque odio, in aliquet libero sollicitudin at. In congue metus id finibus dapibus.
+            Nam nec maximus massa. Pellentesque tristique interdum magna.
+        </p>
+    </section>
+
+</body>
+</html>

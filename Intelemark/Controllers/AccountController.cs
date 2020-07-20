@@ -93,7 +93,7 @@ namespace Intelemark.Controllers
                         }
                         else if (UserManager.IsInRole(user.Id, "Admin"))
                         {
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Index", "Forms");
                         }
                         else if (UserManager.IsInRole(user.Id, "Client"))
                         {

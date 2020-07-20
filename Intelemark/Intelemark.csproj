@@ -422,6 +422,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CallCodesController.cs" />
     <Compile Include="Controllers\CampaignsController.cs" />
+    <Compile Include="Controllers\LandingController.cs" />
     <Compile Include="Controllers\PenaltyController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\FormsController.cs" />
@@ -541,6 +542,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\Landing.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -6220,6 +6222,7 @@
     <Content Include="Views\Forms\AddSelectableAnswer.cshtml" />
     <Content Include="Views\Contacts\Index.cshtml" />
     <Content Include="Views\Agent\AnswerForm.cshtml" />
+    <Content Include="Views\Landing\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
