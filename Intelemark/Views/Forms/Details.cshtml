@@ -54,6 +54,9 @@
                                     <th width="200">
                                         Type
                                     </th>
+                                    <th width="130">
+                                        Points
+                                    </th>
                                     <th width="350">
                                         Questions
                                     </th>
@@ -64,28 +67,32 @@
                                     <tbody>
                                         @foreach (var item in Model.QuestionList)
                                         {
-                                            <tr class="bg-yellow bg-lighten-5 font-weight-bold">
-                                                <td>
-                                                    @item.TypeId.GetDisplayName()
-                                                </td>
-                                                <td>
-                                                    @item.Question
-                                                </td>
-                                                <td></td>
+                                        <tr class="bg-yellow bg-lighten-5 font-weight-bold">
+                                            <td>
+                                                @item.TypeId.GetDisplayName()
+                                            </td>
+                                            <td>
+                                                @item.Points Point(s)
+                                            </td>
+                                            <td>
+                                                <img src="@item.Image" height="15"/>
+                                                @item.Question
+                                            </td>
+                                            <td></td>
 
-                                               @foreach (var ans in item.AnswerList)
-                                                {
-                                            <tr class="">
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    @ans.Answer
-                                                </td>
-                                            </tr>
+                                            @foreach (var ans in item.AnswerList)
+                                            {
+                                                <tr class="">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                        @ans.Answer
+                                                    </td>
+                                                </tr>
                                             }
-                                            </tr>
+                                                </tr>
 
-                                        }
+                                            }
                                     </tbody>
                                 </table>
                             </div>

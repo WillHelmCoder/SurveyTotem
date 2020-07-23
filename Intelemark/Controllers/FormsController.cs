@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -13,6 +14,8 @@ using Intelemark.Entities;
 using Intelemark.Models;
 using Intelemark.Services;
 using Intelemark.Utilities;
+using Microsoft.Ajax.Utilities;
+
 namespace Intelemark.Controllers
 {
     [Authorize]
@@ -57,6 +60,23 @@ namespace Intelemark.Controllers
                 AddAlert($"Oops! something went wrong. Error code: {e.HResult}", "Create", this.GetType().ToString(), AlertType.error, e);
             }
             return View();
+        }
+        
+        [HttpPost]
+        public JsonResult UploadImage()
+        {
+            for (int i = 0; i < Request.Files.Count; i++)
+            {
+                HttpPostedFileBase file = Request.Files[i];
+                string fileName = file.FileName;
+                string[] fileParts = fileName.Split('/');
+                string path = "~/Content/QuestionImages/" + fileParts[0];
+                bool exists = System.IO.Directory.Exists(Server.MapPath(path));
+                if (!exists)
+                    System.IO.Directory.CreateDirectory(Server.MapPath(path));
+                file.SaveAs(Server.MapPath("~/Content/QuestionImages/") + fileName);
+            }
+            return Json("Uploaded " + Request.Files.Count + " files");
         }
 
         [HttpPost]
@@ -113,6 +133,8 @@ namespace Intelemark.Controllers
                         Question = y.Name,
                         TypeId = y.TypeId,
                         Order = y.Order,
+                        Points = y.Points,
+                        Image = y.Image,
                         AnswerList = y.Answers.Select(z => new AnswerModel
                         {
                             Answer = z.Name,
@@ -138,8 +160,10 @@ namespace Intelemark.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> CreateForm(FormModel model)
+        public async Task<JsonResult> CreateForm(FormModel model, HttpPostedFileBase imageFile)
         {
+            //var path = Path.Combine(Server.MapPath("~/Content/QuestionImages/"), System.IO.Path.GetFileName(imageFile.FileName));
+            //imageFile.SaveAs(path);
             try
             {
                 if (ModelState.IsValid)
@@ -170,6 +194,8 @@ namespace Intelemark.Controllers
                             CreationDate = DateTime.Now,
                             LastUpdate = DateTime.Now,
                             IsDeleted = false,
+                            Points = item.Points,
+                            Image = item.Image
                         });
                     }
 

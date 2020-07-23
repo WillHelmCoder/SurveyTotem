@@ -56,8 +56,8 @@
                                         <div data-repeater-item class="form-control form-group">
                                             <div class="row mt-2">
                                                 @*<div class="col-md-2">
-                                                        @Html.EnumDropDownListFor(x => x.QuestionType, null, new { @class = "form-control", @id = "TypeId", @name = "TypeId" })
-                                                    </div>*@
+            @Html.EnumDropDownListFor(x => x.QuestionType, null, new { @class = "form-control", @id = "TypeId", @name = "TypeId" })
+        </div>*@
 
                                                 <div class="col-md-2">
                                                     <select class="form-control" id="TypeId" name="TypeId">
@@ -77,6 +77,15 @@
                                                 <div class="col-md-2">
                                                     <button data-repeater-delete class="btn btn-danger btn-xs" type="button" value="Delete Question"><i class="ft-x"></i> Question</button>
                                                     <button onclick="FalseButon(this);" class="addAnswer btn btn-success btn-xs" type="button" value="Delete Question"><i class="ft-plus"></i> Answer</button>
+                                                </div>
+                                                <br />
+                                                <br />
+                                                <br />
+                                                <div class="col-md-2">
+                                                    <input type="text" name="Points" placeholder="Points" id="Points" class="form-control" />
+                                                </div>
+                                                <div class="col-md-5 ">
+                                                    <input type="file" name="Image" placeholder="Image" id="Image" class="form-control questionImage" accept=".png, .jpg, .jpeg" />
                                                 </div>
                                                 <br />
                                                 <br />
@@ -113,7 +122,7 @@
 
 
                             </div>
-
+                            
 
 
                             <div class="form-actions pull-right">
@@ -200,6 +209,20 @@
 
         function saveData() {
             var arr = Object.values($('.repeater').repeaterVal());
+            var images = document.getElementsByClassName("questionImage");
+            var formdata = new FormData();
+            var carpeta = uuidv4();
+            for (i = 0; i < arr[0].length; i++) {
+                if (images[i].files[0] != null) {
+                    var uuid = uuidv4() + "." + images[i].files[0].name.split('.').pop();
+                    var newPath = carpeta + "/" + uuid;
+                    formdata.append(images[i].files[0].name, images[i].files[0], newPath);
+                    arr[0][i].Image = "/Content/QuestionImages/" + newPath;
+                }
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/Forms/UploadImage');
+            
             $.ajax({
                 type: "POST",
                 url: "/Forms/CreateForm",
@@ -207,9 +230,10 @@
                     'Name': $('#Name').val(),
                     'CampaignId': $('#CampaignId').val(),
                     'Description': $('#Description').val(),
-                    'Questions': arr[0]
+                    'Questions': arr[0],
                 },
                 success: function (data) {
+                    xhr.send(formdata); // Posts images locally
                     swal({
                         title: 'The Form has been succesfully saved!',
                         icon: "success",
@@ -234,6 +258,12 @@
                 }
             });
         }
-
+        // Universally Unique IDentifier
+        function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
     </script>
 }

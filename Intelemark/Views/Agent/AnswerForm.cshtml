@@ -17,6 +17,9 @@
     .blockUI {
         cursor: default !important;
     }
+    img {
+        max-height: 100px;
+    }
 </style>
 
 @using (Html.BeginForm("SaveAnswerForm", "Agent", FormMethod.Post, new { @class = "form", role = "form" }))
@@ -54,8 +57,13 @@
                         <div class="card-body">
                             @foreach (var item in Model.Form.QuestionList)
                             {
+                                <div class="row justify-content-center">
+                                    <img src="@item.Image" />
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
+                                        <label>@item.Points point(s)</label>
+                                        
                                         <h6><strong>@count. @item.Question</strong></h6>
                                         @Html.HiddenFor(x => x.Record.FormAnswers[count - 1].QuestionId, new { @Value = item.Id })
                                     </div>

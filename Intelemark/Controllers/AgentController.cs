@@ -131,6 +131,8 @@ namespace Intelemark.Controllers
                             Question = y.Name,
                             TypeId = y.TypeId,
                             Order = y.Order,
+                            Points = y.Points,
+                            Image = y.Image,
                             AnswerList = y.Answers.Select(z => new AnswerModel
                             {
                                 Id = z.Id,

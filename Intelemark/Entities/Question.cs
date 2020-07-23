@@ -14,6 +14,8 @@ namespace Intelemark.Entities
         public String Name { get; set; }
         public QuestionTypes TypeId { get; set; }
         public Int32 Order { get; set; }
+        public Int32 Points { get; set; }
+        public String Image { get; set; }
 
         [ForeignKey("Form")]
         public Int32 FormId { get; set; }

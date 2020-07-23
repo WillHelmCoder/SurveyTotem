@@ -22,7 +22,8 @@ namespace Intelemark.Models
 
         [Display(Name = "Order")]
         public Int32 Order { get; set; }
-
+        public Int32 Points { get; set; }
+        public String Image { get; set; }
         public Int32 FormId { get; set; }
         public Form Form { get; set; }
 
